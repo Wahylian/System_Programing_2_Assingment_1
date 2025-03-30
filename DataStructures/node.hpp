@@ -1,3 +1,6 @@
+#ifndef NODE
+#define NODE
+
 // this class uses generics, example taken from https://www.geeksforgeeks.org/generics-in-c/
 // this class uses a default value for the generic value, i used the following prompet in chatgpt to learn that it is an option:
 // "I have a class in c++ that works on a generic T, I want it to have a default value"
@@ -12,7 +15,7 @@ class Node{
 
     public:
     // constructor
-    Node(T value=T(), Node<T> *next=nullptr){
+    Node(T& value=T(), Node<T> *next=nullptr){
         this->value = value;
         this->next = next;
     }
@@ -44,3 +47,4 @@ class Node{
     }
     #pragma endregion
 };
+#endif

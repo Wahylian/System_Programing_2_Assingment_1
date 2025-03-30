@@ -1,3 +1,5 @@
+#ifndef QUEUE
+#define QUEUE
 // this class uses generics, example taken from https://www.geeksforgeeks.org/generics-in-c/
 // used https://www.geeksforgeeks.org/basic-operations-for-queue-in-data-structure/ for the basic functions of queue (just looked at what they were, not how they are written)
 #include "node.hpp"
@@ -82,3 +84,4 @@ class Queue{
         return value;
     }
 };
+#endif

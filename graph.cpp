@@ -1,28 +1,27 @@
 // implementation for graph
-
 #include "graph.hpp"
-#include <iostream> // cout and cin were not found - found this solution on https://stackoverflow.com/questions/11375949/cout-is-not-a-member-of-std
 
-// constructor
-Graph::Graph(unsigned int num_vx){
-    this->n = num_vx;
-        this->matrix = new int*[this->n]; // creaing an array of pointers of size n
-        // each of these pointers now needs to point to an array of ints of size n
-        for(int i = 0; i < this->n; i++){
-            (this->matrix)[i] = new int[this->n]; // creating the int array
-            // initiating the values
-            for(int j =0; j < this->n; j++){
-                (this->matrix)[i][j] = __INT32_MAX__; // INT_MAX represents an edge of infinite weight, meaning there is no edge
+List<Edge> Graph::getEdges(){
+    List<Edge> edges = List<Edge>();
+
+    // goes over each vertex in the graph
+    for(int i = 0; i < this->n; i++){
+        // gets a vertex from the graph
+        Vertex v = this->al.getVertex(i);
+
+        // get all possible edges from that vertex
+        for(int j=0; j < this->n; j++){
+            Vertex otherV(j);
+            // if the edge exists
+            if(v.isEdgeExists(otherV)){
+                edges.insert(v.getEdge(otherV)); // adds the edge to the list
             }
         }
+    }
+    // returns the list of edges
+    return edges;
 }
 
-// destructor
-Graph::~Graph(){
-    // destroys the pointer arrays
-        for(int i = 0; i < this->n; i++){
-            delete[] (this->matrix)[i]; // deletes the array
-        }
-        delete[] (this->matrix); // deletes the array of pointers
+void Graph::addEdge(Edge e){
+    this->al.addEdge(e.getVertex1(), e.getVertex2(), e.getWeight());
 }
-

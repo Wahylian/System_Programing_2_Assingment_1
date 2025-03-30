@@ -1,3 +1,5 @@
+#ifndef UNIONFIND
+#define UNIONFIND
 // this class uses generics, example taken from https://www.geeksforgeeks.org/generics-in-c/
 #include "node.hpp"
 #include <stdexcept>
@@ -54,3 +56,4 @@ class UnionFind{
         this->vertices[k].setNext(&(this->vertices[l])); // points the parent of u at the parent of v
     }
 };
+#endif

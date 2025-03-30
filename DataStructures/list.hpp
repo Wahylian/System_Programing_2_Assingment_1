@@ -1,3 +1,5 @@
+#ifndef LIST
+#define LIST
 // this class uses generics, example taken from https://www.geeksforgeeks.org/generics-in-c/
 // inspired by the list of functions in the python implementation of list https://www.geeksforgeeks.org/list-methods-python/
 #include "node.hpp"
@@ -23,8 +25,15 @@ class List{
     ~List(){
         // while the list is not empty, save the start node temporerily, remove it from the list
         // and delete it 
-        while(!this->isEmpty()){
-            Node<T> *temp = this->pop();
+        Node<T> *temp = this->start;
+        while(temp != nullptr){
+            Node<T> *next = temp->getNext();
+            // seperates temp from the list
+            temp->setNext(nullptr);
+            delete temp;
+
+            // advances the pointer
+            temp = next;
         }
     }
 
@@ -36,7 +45,7 @@ class List{
     }
 
     // returns the size of the list
-    int size(){
+    int getSize(){
         return this->size;
     }
 
@@ -138,8 +147,8 @@ class List{
         return false;
     }
  
-    // removes value at index, and returns the value stored there
-    T pop(int index){
+    // removes value at index, and returns a reference to the value stored there, pop's the first index by default
+    T& pop(int index=0){
         // checks if index is out of range, does not allow for index to be equal to size
         if(index < 0 || index >= this->size)
             throw std::out_of_range{"index out of range"};
@@ -194,8 +203,8 @@ class List{
         return next->getValue();
     }
 
-    // returns the value at index i
-    T getValue(int index){
+    // returns the reference to the value at index i
+    T& getValue(int index){
         // checks if index is out of range, does not allow for index to be equal to size
         if(index < 0 || index >= this->size)
             throw std::our_of_range{"index out of range"};
@@ -222,7 +231,6 @@ class List{
         // if the loop ends, the value is not in the list
         return -1;
     }
-
     // returns true if the value is in the list, else false
     bool isExists(T value){
         int i = this->getIndex(value);
@@ -230,3 +238,4 @@ class List{
         return i != -1;
     }
 };
+#endif
