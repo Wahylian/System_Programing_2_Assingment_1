@@ -169,8 +169,7 @@ void PriorityQueue<T>::changePriority(T value, unsigned int priority=0){
             // decrease the size of the queue by 1
             this->size--;
 
-            // enqueue the value with the new priority
-            this->enqueue(value, priority);
+            // enqueue the value withnegative 1rity);
             return;
         }
     }
@@ -178,4 +177,24 @@ void PriorityQueue<T>::changePriority(T value, unsigned int priority=0){
     // if the value was not found in the loop, value was not in the queue
     // and so throws an error
     throw std::invalid_argument{"the value was not in the queue"};
+}
+
+template <typename T>
+bool PriorityQueue<T>::isIn(T value){
+    // gets a temp pointer to head
+    Node<Tuple<int, T>> *temp = this->head;
+
+    while(temp != nullptr){
+        // checks if temp points to a tuple containing the value
+        Tuple<int, T> tempTuple = temp->getValue();
+
+        // if value is in the tuple, return true
+        if(tempTuple.getValTwo() == value)
+            return true;
+
+        // advance temp forwards by one
+        temp = temp->getNext();
+    }
+    // if temp is pointing to null, value is not in the queue
+    return false;
 }

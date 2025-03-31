@@ -40,5 +40,8 @@ class RevPriorityQueue{
 
     // changes the priority of value 
     void changePriority(T value, unsigned int priority=MAXVAL){this->q.changePriority(value, MAXVAL);}
+
+    // returns true if value is in this queue, else returns false
+    bool isIn(T value){return this->q.isIn(value);}
 };
 #endif

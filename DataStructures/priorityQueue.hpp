@@ -40,5 +40,8 @@ class PriorityQueue{
 
     // changes the priority of value 
     void changePriority(T value, unsigned int priority=0);
+
+    // returns true if value is in this queue, else returns false
+    bool isIn(T value);
 };
 #endif

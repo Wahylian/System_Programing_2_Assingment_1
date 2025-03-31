@@ -217,3 +217,131 @@ void Algorithms::relax(Edge& e, List<int>& pi, List<unsigned int>& d, RevPriorit
         q.changePriority(v, d.getValue(v));
     }
 }
+
+Graph Algorithms::prim(Graph g){
+    // creates a priority queue
+    RevPriorityQueue<unsigned int> q = RevPriorityQueue<unsigned int>();
+
+    // creates a list pi in which pi[v] is the parent of vertex v in g
+    List<unsigned int> pi = List<unsigned int>();
+    // creates a list key holding the priorities of each vertex v in g
+    List<int> key = List<int>();
+    
+    for(int i=0; i<g.getSize(); i++){
+        // sets the pi of each vertex v to -1 as a default value, representing it has no parent so far
+        pi.insert(-1);
+
+        // sets the key of each vertex v to INT32_MAX, as that is the default priority in q
+        key.insert(__INT32_MAX__);
+    }
+    for(int i=0; i<g.getSize(); i++)
+        // inserts each vertex of g to q with the default priority
+        q.enqueue(i);
+
+    // sets the priority of vertex 0 in g to 0
+    q.changePriority(0, 0);
+    key.pop(0);
+    key.insert(0, 0); // inserts priority 0 for vertex 0
+
+    // while q is not empty
+    while(!q.isEmpty()){
+        // remove vertex v from q
+        unsigned int v = q.dequeue();
+        Vertex vx = g.getVertex(v);
+
+        // get all the edges in vx
+        List<Edge> vx_edges = vx.getEdges();
+
+        // going over each adjacent vertex to v
+        for(int i=0; i<vx_edges.getSize(); i++){ 
+            // gets an adjacent vertex to v
+            Edge e = vx_edges.getValue(i);
+            unsigned int u = e.getVertex2();
+
+            // check if q contains u
+            if(q.isIn(u)){
+                // checks if the weight of e is smaller than the key of u
+                if(e.getWeight() < key.getValue(u)){
+                    // if it is, changes the parent of u to v
+                    pi.remove(u);
+                    pi.insert(v, u); // sets the parent of u to v
+                    // and sets the priority of u to the weight of e
+                    key.pop(u);
+                    key.insert(e.getWeight(), u);
+                    q.changePriority(u, e.getWeight()); // changes it in the queue as well
+                }
+            }
+        }
+    }
+    
+    // the edges of the MST will be the edges from each v to pi[v]
+    List<Edge> newEdges = List<Edge>();
+
+    // since i = 0 is the starting point, it has no pi and so it is skipped
+    for(int i=1; i<g.getSize(); i++){
+        
+        Vertex vx = g.getVertex(i);
+        // gets the edge bewteen i and pi[i]
+        if(vx.isEdgeExists(pi.getValue(i))){
+            Edge e = vx.getEdge(pi.getValue(i));
+
+            // adds the edge to newEdges
+            newEdges.insert(e);
+        }
+    }
+
+    // creates a new graph
+    Graph newGraph = Graph(g.getSize());
+
+    // adds the edges to the graph
+    for(int i=0; i<newEdges.getSize(); i++)
+        newGraph.addEdge(newEdges.getValue(i));
+    
+    // returns the new Graph
+    return newGraph;
+}
+
+Graph Algorithms::kruskal(Graph g){
+    // get all edges of g
+    List<Edge> edges = g.getEdges();
+
+    // places the edges in a reverse priority queue
+    RevPriorityQueue<Edge> q = RevPriorityQueue<Edge>();
+    for(int i=0; i<edges.getSize(); i++){
+        Edge e = edges.getValue(i);
+        // inserts e to q with it's weight as its priority
+        q.enqueue(e, e.getWeight());
+    }
+
+    // creates a unionfind for the vertices in g
+    UnionFind uf = UnionFind(g.getSize());
+    // creates a list to store the edges in the MST
+    List<Edge> newEdges = List<Edge>();
+
+    // for each vertex (v,w) in q, if v and w do not belong in the same component, 
+    // create a union between them, and add (v,w) to newEdges
+    while(!q.isEmpty()){
+        // removes the top value from q
+        Edge e = q.dequeue();
+
+        // gets the vertices of e
+        unsigned int v1 = e.getVertex1();
+        unsigned int v2 = e.getVertex2();
+
+        // if v1 and v2 do not belong to the same set in uf
+        // connects their sets
+        if(uf.Find(v1) != uf.Find(v2)){
+            uf.Union(v1, v2);
+            // adds e to newEdges
+            newEdges.insert(e);
+        }
+    }
+
+    // creates a new Graph
+    Graph newGraph = Graph(g.getSize());
+    // adds the new edges to newGraph
+    for(int i=0; i<newEdges.getSize(); i++)
+        newGraph.addEdge(newEdges.getValue(i));
+    
+    return newGraph;
+}

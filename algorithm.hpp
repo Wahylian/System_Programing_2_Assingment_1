@@ -1,5 +1,6 @@
 #include "graph.hpp"
 #include "DataStructures/reversePriorityQueue.hpp"
+#include "DataStructures/unionFind.hpp"
 
 class Algorithms{
     private:
