@@ -287,7 +287,7 @@ class List{
     #pragma endregion
 
     // returns a reference to the value at index i
-    T& getValue(int i){
+    const T& getValue(int i) const {
         // if the index is out of range, throw an error
         if(i < 0 ||i >= this->_size)
             throw std::out_of_range{"index " + std::to_string(i) + " out of range"};

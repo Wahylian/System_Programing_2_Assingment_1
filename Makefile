@@ -9,7 +9,8 @@ OBJS_DS = DataStructures/adjacencyList.o DataStructures/vertex.o \
 MAIN_OBJ = main.o graph.o algorithm.o $(OBJS_DS)
 
 TEST_OBJ = Tests/testFile.o Tests/testList.o Tests/testPriorityQueue.o Tests/testReversePriorityQueue.o \
-	Tests/testUnionFind.o DSs/unionFind.o
+	Tests/testUnionFind.o DSs/unionFind.o Tests/testEdge.o Graphs/edge.o Tests/testVertex.o \
+	Graphs/vertex.o
 
 # valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 
@@ -34,4 +35,4 @@ valgrind-test: test
 	valgrind $(VALGRIND_FLAGS) ./test
 
 clean:
-	rm -f *.o DSs/*.o Tests/*.o  main test
+	rm -f *.o DSs/*.o Tests/*.o Graphs/*.o main test

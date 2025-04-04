@@ -1,4 +1,4 @@
-#include "../doctest.h"
+#include "doctest.h"
 #include "../DSs/priorityQueue.hpp"
 
 TEST_CASE("Initiating the Priority Queue"){

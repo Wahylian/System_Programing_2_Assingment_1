@@ -1,4 +1,4 @@
-#include "../doctest.h"
+#include "doctest.h"
 #include "../DSs/unionFind.hpp"
 
 TEST_CASE("Initializing the UnionFind"){

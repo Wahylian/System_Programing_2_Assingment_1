@@ -5,10 +5,8 @@
 #include "../debug.hpp"
 #endif
 #include <stdexcept>
-// including the list class to store the edges of v
+#include <iostream>
 #include "../DSs/list.hpp"
-
-// includes the edge class save the edges of v
 #include "edge.hpp"
 
 // this class represents a vertex
@@ -34,20 +32,41 @@ class Vertex{
     // returns true if there is an edge from this vertex to v
     bool isEdgeExists(int v) const;
 
+    // returns true if there is an edge e in this vertex
+    bool isEdgeExists(const Edge &e) const;
+
     // returns the edge from this vertex to v
-    Edge getEdge(const Vertex& v) const;
+    const Edge& getEdge(const Vertex& v) const;
+
+    // returns the edge from this vertex to v
+    const Edge& getEdge(int v) const;
 
     // returns a reference to all edges from this vertex
-    const List<Edge>& getEdges();
+    const List<Edge>& getEdges() const;
 
     // adds an edge from this vertex to v of weight weight
-    // if a vertex between the two already exist, overrides the weight
-    void addEdge(Vertex &v, int weight=1);
+    // if an edge between the two already exists, overrides the weight
+    void addEdge(const Vertex &v, int weight=1);
+    // NOTE: Since the vertex is built for a directional graph, an edge from a vertex to itself is premitted
+
+    // adds an edge from this vertex to v of weight weight
+    // if an edge between the two already exists, overrides the weight
+    void addEdge(int v, int weight=1);
+
+    // adds the edge to this vertex
+    void addEdge(const Edge &e);
 
     // removes the edge between this vertex and v
-    Edge removeEdge(Vertex &v);
+    // if the edge doesn't exist, throw an error
+    Edge removeEdge(const Vertex &v);
 
     // prints the information of this vertex
-    void print();
+    void print() const;
+
+    // returns true if this and v are the same, else false
+    bool operator== (const Vertex &v) const; 
+
+    // returns false if this and v are the same, else true
+    bool operator!= (const Vertex &v) const;
 };
 #endif

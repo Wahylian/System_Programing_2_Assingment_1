@@ -19,13 +19,22 @@ weight{weight}
 }
 
 bool Edge::operator== (const Edge &e) const{
-    // the graph is undirectional and so two edges will be equal if they go through the same vertices
-    // even if they have different weights
+    // returns true if both edges go from vertex v to vertex u
+    // ignores weight
     if(this->v == e.getVertex1() && this->u == e.getVertex2())
         return true;
-    
-    if(this->u == e.getVertex1() && this->v == e.getVertex2())
-        return true;
-    
+
     return false;
+}
+
+bool Edge::operator!= (const Edge &e) const{
+    // returns true if == returns false, else true
+    return !(*this == e);
+}
+
+std::string Edge::to_string() const{
+    std::string s = "(" + std::to_string(this->getVertex1());
+    s += ", " + std::to_string(this->getVertex2()) +")";
+    s += " Weight: "+ std::to_string(this->getWeight());
+    return s;
 }

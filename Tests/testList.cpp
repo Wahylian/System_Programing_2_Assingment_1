@@ -1,4 +1,4 @@
-#include "../doctest.h"
+#include "doctest.h"
 #include "../DSs/list.hpp"
 
 TEST_CASE("Testing List Initiallization"){
