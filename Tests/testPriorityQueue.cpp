@@ -1,0 +1,286 @@
+#include "../doctest.h"
+#include "../DSs/priorityQueue.hpp"
+
+TEST_CASE("Initiating the Priority Queue"){
+    // creating an instance of a queue
+    PriorityQueue<int> pQ = PriorityQueue<int>();
+
+    // checks that the queue is empty
+    SUBCASE("Queue is Empty"){
+        CHECK(pQ.isEmpty() == true);
+    }
+
+    // checks that the size of the queue is 0
+    SUBCASE("Size is 0"){
+        CHECK(pQ.size() == 0);
+    }
+
+    // checks that the top value throws an error, as the queue is empty
+    SUBCASE("Top in empty Queue"){
+        CHECK_THROWS(pQ.top());
+    }
+}
+
+TEST_CASE("Dequeueing"){
+    PriorityQueue<int> pQ = PriorityQueue<int>();
+
+    // checking dequeuing an empty queue
+    SUBCASE("Dequeueing Empty Queue"){
+        // checks the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // checks an error is thrown
+        CHECK_THROWS(pQ.dequeue());
+    }
+
+    // checking dequeueing from a queue with values
+    SUBCASE("Dequeueing from a non-Empty Queue"){
+        // enqueueing values to the queue
+        for(int i=0; i<10; i++)
+            pQ.enqueue(i);
+        
+        // checks the queue is not empty
+        CHECK(pQ.isEmpty() != true);
+
+        // checks that the size is equal to 10
+        CHECK(pQ.size() == 10);
+
+        // checks that the dequeueing decreases the size of the queue
+        for(int i=0; i<10; i++){
+            // checks that the dequeued value is correct
+            CHECK(pQ.dequeue() == i);
+
+            // checks the size of the queue decreased
+            CHECK(pQ.size() == 9-i);
+        }
+    }
+}
+
+TEST_CASE("Checking Top"){
+    SUBCASE("Top in an Empty Queue"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        // checks that the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // checks an error is thrown on top call
+        CHECK_THROWS(pQ.top());
+    }
+
+    SUBCASE("Top in a non empty queue"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        
+        // enqueue a value into the queue
+        pQ.enqueue(5, 1);
+        CHECK(pQ.top() == 5);
+    
+        // enqueue another value with a higher priority
+        pQ.enqueue(8,3);
+        CHECK(pQ.top() == 8);
+        
+        // enqueue another value with a lower priority
+        pQ.enqueue(1, 2);
+        CHECK(pQ.top() == 8);
+
+        // checks that all 3 values are in the queue
+        CHECK(pQ.size() == 3);
+    }
+}
+
+TEST_CASE("Checking Contains"){
+    SUBCASE("Contains in Empty Queue"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        // checks that the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // checks an error is thrown on contains call
+        CHECK_THROWS(pQ.contains(3));
+    }
+
+    SUBCASE("Contains an existing value"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        // checks that the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // enqueues a value into the queue
+        pQ.enqueue(10, 4);
+
+        // checks that the queue contains the value
+        CHECK(pQ.contains(10) == true);
+    }
+
+    SUBCASE("Contains a non-existing value"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        // checks that the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // enqueues a value into the queue
+        pQ.enqueue(10, 4);
+
+        // checks that the queue contains a non-existing value
+        CHECK(pQ.contains(3) != true);
+    }
+}
+
+TEST_CASE("Checking priority"){
+    // Enqueueing values into the queue with default priorities
+    SUBCASE("Enqueuing into Queue with Default Priority"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+        
+        // checks the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // enqueuing multiple values with default priority
+        for(int i=0; i<10; i++)
+            pQ.enqueue(i); // default priority is 0
+
+        // checks the size is correct
+        CHECK(pQ.size() == 10);
+        
+        // checking all values are in the queue
+        for(int i=0; i<10; i++)
+            CHECK(pQ.contains(i) == true);
+
+        // since all values are with the same priority,
+        // the priority queue should act like a normal queue
+        for(int i=0; i<10; i++)
+            CHECK(pQ.dequeue() == i);   
+
+        // checks the queue is empty
+        CHECK(pQ.isEmpty() == true);
+    }
+
+    // Enqueueing values into the queue with a priority
+    SUBCASE("Enqueueing into Queue with Priority"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // check that the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // enqueuing multiple values into the queue with increasing priorities
+        for(int i=0; i<10; i++)
+            pQ.enqueue(i, i);
+        
+        // checks the size is correct
+        CHECK(pQ.size() == 10);
+
+        // checking all values are in the queue
+        for(int i=0; i<10; i++)
+            CHECK(pQ.contains(i) == true);
+        
+        // since the values are enqueued with a priority equal to them, 
+        // the priority queue should act like a stack
+        for(int i=0; i<10; i++)
+            CHECK(pQ.dequeue() == 9-i);
+        
+        // checks the queue is empty
+        CHECK(pQ.isEmpty() == true);
+    }
+
+    SUBCASE("Enqueueing with negative priority"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // checks that the function throws an error on enqueueing with a negative priority
+        CHECK_THROWS(pQ.enqueue(5, -2));
+    }
+}
+
+TEST_CASE("Change Priority"){
+    SUBCASE("Changing priority on empty queue"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // attempts to change priority
+        CHECK_THROWS(pQ.changePriority(5, 10));
+    }
+
+    SUBCASE("Changing the Priority of existing values"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // enqueueing values into the queue, with a default priority
+        for(int i=0; i<10; i++)
+            pQ.enqueue(i);
+    
+        // checks that the top value has is correct
+        CHECK(pQ.top() == 0);
+    
+        // checks the value 3 is in the queue
+        CHECK(pQ.contains(3) == true);
+    
+        // changes the priority of the value 3 to 10
+        // should cause it to move to the start
+        pQ.changePriority(3, 10);
+        // checks that 3 is at the top of the queue
+        CHECK(pQ.top() == 3);
+    
+        // changes the priority of multiple values
+        pQ.changePriority(8, 4);
+        pQ.changePriority(2, 2);
+    
+        // changes the priority of 3 to 3
+        pQ.changePriority(3, 3);
+        // checks that 8 is at the top
+        CHECK(pQ.top() == 8);
+    
+        // checks that the order of the top 3 values is 8, 3, 2
+        CHECK(pQ.dequeue() == 8);
+        CHECK(pQ.dequeue() == 3);
+        CHECK(pQ.dequeue() == 2);
+    }
+    
+    SUBCASE("Changes priority of non-existing value"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // checks the queue is empty
+        CHECK(pQ.isEmpty() == true);
+
+        // enqueuing values to queue
+        for(int i=0; i<10; i++)
+            pQ.enqueue(i);
+
+        // checks that the value -5 doesn't exist
+        CHECK(pQ.contains(-5) == false);
+
+        // attempts to change the priority of -5
+        CHECK_THROWS(pQ.changePriority(-5, 10));
+    }
+
+    SUBCASE("Changes Priority with a negative Priority"){
+        PriorityQueue<int> pQ = PriorityQueue<int>();
+
+        // enqueues a value
+        pQ.enqueue(5, 20);
+
+        // checks that 5 is in the queue
+        CHECK(pQ.contains(5) == true);
+
+        // changes the priority of 5 into a negative number
+        CHECK_THROWS(pQ.changePriority(5, -19));
+    }
+}
+
+TEST_CASE("Memory Leak Tests"){
+    // creates a new instance of priority queue
+    PriorityQueue<int> *pQ = new PriorityQueue<int>();
+    
+    // checks the queue is empty
+    CHECK(pQ->isEmpty() == true);
+
+    // enqueues multiple values into the queue
+    pQ->enqueue(2,4);
+    pQ->enqueue(5,2);
+    pQ->enqueue(10);
+    pQ->enqueue(8, 6);
+    pQ->enqueue(1, 5);
+
+    // checks the size is 5
+    CHECK(pQ->size() == 5);
+
+    // dequeues multiple values from the queue
+    CHECK(pQ->dequeue() == 8);
+    CHECK(pQ->dequeue() == 1);
+
+    // checks the size is 3
+    CHECK(pQ->size() == 3);
+
+    // deletes the queue
+    delete pQ;
+}
