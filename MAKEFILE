@@ -1,4 +1,0 @@
-CXX = g++
-
-# valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
-VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 
