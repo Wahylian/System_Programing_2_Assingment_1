@@ -1,5 +1,6 @@
 #include "doctest.h"
 #include "../DSs/list.hpp"
+#include "../Graphs/edge.hpp"
 
 TEST_CASE("Testing List Initiallization"){
     // creates an instance of a list
@@ -14,6 +15,49 @@ TEST_CASE("Testing List Initiallization"){
     SUBCASE("List size is 0"){
         CHECK(list.size() == 0);
     }
+}
+
+TEST_CASE("Test Copy Constructor"){
+    // test with edges as they are a complex object type
+    List<Edge> *og_list = new List<Edge>();
+
+    // inserts multiple edges
+    og_list->insert(Edge(5, 4));
+    og_list->insert(Edge(0, 9));
+    og_list->insert(Edge(4, 5));
+    og_list->insert(Edge(8, 2));
+
+    // check that the list has 4 edges
+    CHECK(og_list->size() == 4);
+
+    // copies the list
+    List<Edge> *copy_list = new List<Edge>(*og_list);
+
+    // checks that the pointers point to different locations in the heap
+    CHECK(og_list != copy_list);
+
+    // checks that all the values in the original are in the copy
+    // and that they are not in the same location
+    CHECK(og_list->size() == copy_list->size());
+    for(int i=0; i<og_list->size(); i++){
+        // checks the values were copied in the correct order
+        CHECK(og_list->getValue(i) == copy_list->getValue(i));
+        // checks they are not stored in the same memory address
+        CHECK(&(og_list->getValue(i)) != &(copy_list->getValue(i)));
+    }
+
+    // checking that removing a value from copy doesn't affect the original
+    Edge e = copy_list->pop(2);
+
+    // checks that only the copy was affected
+    CHECK(og_list->size() == 4);
+    CHECK(copy_list->size() == 3);
+    CHECK(og_list->isExists(e) == true);
+    CHECK(copy_list->isExists(e) == false);
+
+    // deleting the lists
+    delete og_list;
+    delete copy_list;
 }
 
 TEST_CASE("Testing List Insert"){

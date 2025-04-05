@@ -33,6 +33,30 @@ TEST_CASE("Edge initialization"){
     }
 }
 
+TEST_CASE("Test Copy Constructor"){
+    // create a new edge
+    Edge *e = new Edge(0, 6, 3);
+    // create a copy of the edge
+    Edge *copy = new Edge(*e);
+
+    // check that the pointers point to different addresses
+    CHECK(e != copy);
+
+    // checks that the values in e and copy are the same
+    CHECK(e->getVertex1() == copy->getVertex1());
+    CHECK(e->getVertex2() == copy->getVertex2());
+    CHECK(e->getWeight() == copy->getWeight());
+
+    // checks that changing the weight in the copy doesn't affect the original
+    copy->setWeight(8);
+    CHECK(copy->getWeight() == 8);
+    CHECK(e->getWeight() == 3);
+
+    // deletes both edges
+    delete e;
+    delete copy;
+}
+
 TEST_CASE("Getters"){
     SUBCASE("Get vertex1"){
         Edge e = Edge(1, 4);

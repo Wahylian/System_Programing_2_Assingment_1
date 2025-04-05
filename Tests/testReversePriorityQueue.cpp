@@ -1,5 +1,6 @@
 #include "doctest.h"
 #include "../DSs/reversePriorityQueue.hpp"
+#include "../Graphs/edge.hpp"
 
 TEST_CASE("Initiating the Priority Queue"){
     // creating an instance of a queue
@@ -19,6 +20,49 @@ TEST_CASE("Initiating the Priority Queue"){
     SUBCASE("Top in empty Queue"){
         CHECK_THROWS(pQ.top());
     }
+}
+
+TEST_CASE("Test Copy Constructor"){
+    // using edge as it is a complex data type
+
+    RevPriorityQueue<Edge> *pQ = new RevPriorityQueue<Edge>();
+
+    // enqueues multiple edges into it
+    pQ->enqueue(Edge(3, 5, 2), 5);
+    pQ->enqueue(Edge(2, 0, 10), 8);
+    pQ->enqueue(Edge(0, 8, -3), 0);
+    pQ->enqueue(Edge(5,10, 0), 3);
+
+    // copies the priority Queue
+    RevPriorityQueue<Edge> *copy = new RevPriorityQueue<Edge>(*pQ);
+
+    // checks each pointer points to a different address
+    CHECK(pQ != copy);
+
+    // checks the size of both queues is the same
+    CHECK(pQ->size() == pQ->size());
+
+    // checks that for each value in the queue is the same
+    while(!pQ->isEmpty()){
+        const Edge &e_og = pQ->top();
+        const Edge &e_copy = copy->top();
+
+        // compares each edge in the queues
+        CHECK(&e_og != &e_copy); // checks the edges are stored in a different address
+        // checks the values in the edges are the same
+        CHECK(e_og.getVertex1() == e_copy.getVertex1());
+        CHECK(e_og.getVertex2() == e_copy.getVertex2());
+        CHECK(e_og.getWeight() == e_copy.getWeight());
+
+        // dequeues both queues
+        pQ->dequeue();
+        copy->dequeue();
+    }
+
+
+    // deletes both lists
+    delete pQ;
+    delete copy;
 }
 
 TEST_CASE("Dequeueing"){

@@ -1,35 +1,58 @@
 #include "unionFind.hpp"
 
 UnionFind::UnionFind(int num_vx):   
-n{num_vx},
-vertices{nullptr} 
+_n{num_vx},
+_vertices{nullptr} 
 {   
     #ifdef DEBUG
     std::cout << "UnionFind constructor" << std::endl;
     #endif
     // if n is non positive, throw an error, as there must be at least one vertex in the unionFind
-    if(this->n <= 0)
+    if(this->_n <= 0)
         throw std::invalid_argument{"there must be at least one vertex in the UnionFind"};
 
     // creates an array of n nodes
-    this->vertices = new Node<int>[this->n];
+    this->_vertices = new Node<int>[this->_n];
     // initializes the value in each node
-    for(int i=0; i<this->n; i++){
-        this->vertices[i].setValue(i); // sets the value of the node to the corrisponding vertex number
+    for(int i=0; i<this->_n; i++){
+        this->_vertices[i].setValue(i); // sets the value of the node to the corrisponding vertex number
+    }
+}
+
+UnionFind::UnionFind(const UnionFind &uf):
+_n{uf._n},
+_vertices{nullptr}
+{
+    // creates an array of n nodes
+    this->_vertices = new Node<int>[this->_n];
+    // goes over each node in uf, checks which node it points to, and copies the correct index
+    for(int i=0; i<this->_n; i++){
+        // sets the value of the node
+        this->_vertices[i].setValue(i);
+
+        // gets a pointer to the node uf._vertices[i] points to
+        Node<int> *temp = uf._vertices[i].getNext();
+        // checks if its not null
+        if(temp != nullptr){
+            // saves the index in that node's value
+            int index = temp->getValue();
+            // point's this->_vertices[i]'s next to this->_vertices[index]
+            this->_vertices[i].setNext(&(this->_vertices[index]));
+        }
     }
 }
 
 UnionFind::~UnionFind(){
-    delete[] this->vertices; // deletes the array
+    delete[] this->_vertices; // deletes the array
 }
 
-int UnionFind::Find(int vertex){
+int UnionFind::Find(int vertex) const{
     // if the vertex is not in the unionFind class at all, throw an exception
-    if(vertex<0 || vertex >= this->n)
+    if(vertex<0 || vertex >= this->_n)
         throw std::out_of_range{"the vertex doesn't exist"};
     
     // goes to the index of the node corrisponding to vertex
-    Node<int> *temp = &(this->vertices[vertex]);
+    Node<int> *temp = &(this->_vertices[vertex]);
     // while temp has a next, advance temp
     while(temp->getNext()!=nullptr)
         temp = temp->getNext();
@@ -49,5 +72,5 @@ void UnionFind::Union(int v, int u){
         return; // as there is no need to union the two 
 
     // else, points the head of the set of u to the head of the set of v
-    this->vertices[head_u].setNext(&(this->vertices[head_v]));
+    this->_vertices[head_u].setNext(&(this->_vertices[head_v]));
 }
