@@ -15,6 +15,41 @@ TEST_CASE("Initializing the UnionFind"){
     }
 }
 
+TEST_CASE("Test Copy Constructor"){
+    // creates a new union find
+    UnionFind *uf = new UnionFind(10);
+
+    // unions multiple vertices
+    uf->Union(1, 4);
+    uf->Union(8, 0);
+    uf->Union(2, 5);
+    uf->Union(5, 7);
+    uf->Union(1, 8);
+    
+    // creates a copy of uf
+    UnionFind *copy = new UnionFind(*uf);
+
+    // checks that the pointers point to different addresses
+    CHECK(uf != copy);
+
+    // checks that the size of both union finds is the same
+    CHECK(uf->size() == copy->size());
+
+    // checks that for each value i in uf, the head of set in uf is the same of the head of set in copy
+    for(int i=0; i<uf->size(); i++){
+        CHECK(uf->Find(i) == copy->Find(i));
+    }
+
+    // checks that a change in copy doesn't effect uf
+    copy->Union(5, 6);
+    CHECK(uf->Find(6) != uf->Find(5));
+    CHECK(copy->Find(6) == copy->Find(5));
+
+    // deletes both unionfinds
+    delete uf;
+    delete copy;
+}
+
 TEST_CASE("Test Find Function"){
     // attempts to find a vertex outside the parameters of the unionfind
     SUBCASE("Find a none existing vertex"){

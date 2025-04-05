@@ -1,10 +1,11 @@
-#ifndef PRIOQUEUE
-#define PRIOQUEUE
+#pragma once
 #ifndef DEBUG
 // debug check
 #include "../debug.hpp"
 #endif
 #include <stdexcept>
+#include <iostream>
+#define DEBUG_Dijakstra
 #include "node.hpp"
 #include "tuple.hpp"
 
@@ -27,6 +28,53 @@ class PriorityQueue{
         #ifdef DEBUG
         std::cout << "PriorityQueue constructor" << std::endl;
         #endif
+    }
+
+    // copy constructor
+    PriorityQueue(const PriorityQueue<T> &pQ):
+    _head{nullptr},
+    _last{nullptr},
+    _size{0}
+    {
+        // if pQ is empty, returns
+        if(pQ._size == 0)
+            return;
+
+            Node<Tuple<int, T>> *temp_other = pQ._head; // gets a pointer to the head of the other list
+        
+            // copies the first value in list
+    
+            // creates a new node with the value at head
+            this->_head = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+    
+            // advances temp_other
+            temp_other = temp_other->getNext();
+    
+            // points temp pointer at the head
+            Node<Tuple<int, T>> *temp = this->_head;
+            // points last at temp
+            this->_last = temp;
+    
+            // copies over every other value in queue
+            for(int i=1; i<pQ._size; i++){
+                // creates a new node with the value at temp_other
+                Node<Tuple<int, T>> *tNode = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+    
+                // advances temp_other
+                temp_other = temp_other->getNext();
+    
+                // points temp's next at it
+                temp->setNext(tNode);
+    
+                // points last at temp's next
+                this->_last = temp->getNext();
+    
+                // advance temp
+                temp = temp->getNext();
+            }
+    
+            // sets the size of the queue
+            this->_size = pQ._size;
     }
 
     // destructor
@@ -109,12 +157,8 @@ class PriorityQueue{
     #pragma region Queueing
     // queues the value based on it's priority, by default priority will be 0
     void enqueue(T value, int priority=0){
-        // if the priority is negative, throws an error
-        if(priority < 0)
-            throw std::invalid_argument{"priority must be non-negative"};
-
-        // creates a new Tuple from the value and its priority
-        Tuple<int, T> t = Tuple<int, T>(priority, value);
+        // creates a new Tuple from the copy of value and its priority
+        Tuple<int, T> t = Tuple<int, T>(priority, T(value));
 
         // creates a new node
         Node<Tuple<int, T>> *node = new Node<Tuple<int, T>>(t);
@@ -209,18 +253,26 @@ class PriorityQueue{
         return value;
     }
 
+  
     // changes the priority of value
     void changePriority(T value, int priority=0){
-        // if the priority is negative, throws error
-        if(priority < 0)
-            throw std::invalid_argument{"priority must be non-negative"};
-
         // if the queue is empty throws an error
         if(this->isEmpty())
             throw std::underflow_error{"queue is empty"};
 
+        #ifdef DEBUG_Dijakstra
+        std::cout<<"print value = "<< value << " print priority = " << priority<< std::endl;
+
+
+        #endif
+
+
         // if the value is stored in the head, separate the head and requeue the value with the new priority
         if(this->_head->getValue().getSecond() == value){
+            #ifdef DEBUG_Dijakstra
+            std::cout<<"in head " << priority<< std::endl;
+            #endif
+
             // saves a pointer to the head
             Node<Tuple<int, T>> *temp = this->_head;
             // if the queue has only one node, points last to null
@@ -242,6 +294,9 @@ class PriorityQueue{
             this->enqueue(value, priority);
             return;
         }
+        #ifdef DEBUG_Dijakstra
+        std::cout<<"not in head"<< std::endl;
+        #endif
 
         // if the value was not in the head of the queue
         // go over the next value in the queue until it is found
@@ -278,10 +333,13 @@ class PriorityQueue{
             temp = next;
             next = next->getNext();
         }
+        #ifdef DEBUG_Dijakstra
+        std::cout<<"not found"<< std::endl;
+        #endif
+
         // if the value was not found in the loop, value was not in the queue
         // and so throws an error
         throw std::invalid_argument{"value not found in queue"};
     }
     #pragma endregion
 };
-#endif

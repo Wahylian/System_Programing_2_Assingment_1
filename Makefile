@@ -2,15 +2,18 @@ CXX=clang++
 CXXFLAGS=-std=c++2a 
 
 # object files for the data structures
-OBJS_DS = DataStructures/adjacencyList.o DataStructures/vertex.o \
-	DataStructures/edge.o DataStructures/list.o DataStructures/node.o DataStructures/queue.o \
-	DataStructures/tuple.o DataStructures/unionFind.o DataStructures/priorityQueue.o DataStructures/reversePriorityQueue.o
+OBJS_DS = DSs/list.o DSs/node.o DSs/priorityQueue.o DSs/reversePriorityQueue.o \
+	DSs/tuple.o DSs/unionFind.o
 
-MAIN_OBJ = main.o graph.o algorithm.o $(OBJS_DS)
+# object files for the graph related files
+OBJS_GRAPH = Graphs/adjacencyList.o Graphs/algorithm.o Graphs/edge.o Graphs/graph.o Graphs/vertex.o
+
+MAIN_OBJ = main.o $(OBJS_GRAPH) $(OBJS_DS)
 
 TEST_OBJ = Tests/testFile.o Tests/testList.o Tests/testPriorityQueue.o Tests/testReversePriorityQueue.o \
 	Tests/testUnionFind.o DSs/unionFind.o Tests/testEdge.o Graphs/edge.o Tests/testVertex.o \
-	Graphs/vertex.o
+	Graphs/vertex.o Tests/testAdjacencyList.o Graphs/adjacencyList.o Tests/testGraph.o \
+	Graphs/graph.o
 
 # valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 

@@ -11,6 +11,53 @@ TEST_CASE("Vertex Initialization"){
     }
 }
 
+TEST_CASE("Test Copy Constructor"){
+    // creates a vertex
+    Vertex *v = new Vertex(0);
+
+    // adds edges to v
+    v->addEdge(5, 4);
+    v->addEdge(2, 10);
+    v->addEdge(1, -5);
+    v->addEdge(9);
+    v->addEdge(6, 7);
+    
+    // copies v
+    Vertex *u = new Vertex(*v);
+
+    // checks that each pointer points to a different address
+    CHECK(v != u);
+
+    // checks both vertices are equal
+    CHECK(*v == *u);
+
+    const List<Edge> &v_edges = v->getEdges();
+    const List<Edge> &u_edges = u->getEdges();
+
+    // checks each list of vertices in v and u is different
+    CHECK(&v_edges != &u_edges);
+
+    // checks they have the same size
+    CHECK(v_edges.size() == u_edges.size());
+
+    // check they have the same edges
+    for(int i=0; i<v_edges.size(); i++){
+        const Edge &e_v = v_edges.getValue(i);
+        const Edge &e_u = u_edges.getValue(i);
+
+        // checks the edges are stored in different addresses
+        CHECK(&e_v != &e_u);
+        // checks their values are the same
+        CHECK(e_v.getVertex1() == e_u.getVertex1());
+        CHECK(e_v.getVertex2() == e_u.getVertex2());
+        CHECK(e_v.getWeight() == e_u.getWeight());
+    }
+
+    // deletes both vertices
+    delete v;
+    delete u;
+}
+
 TEST_CASE("Adding Edges"){
     SUBCASE("add using vertex name"){
         SUBCASE("valid vertex name"){

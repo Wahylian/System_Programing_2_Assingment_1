@@ -1,5 +1,4 @@
-#ifndef NODE
-#define NODE
+#pragma once
 #ifndef DEBUG
 // debuging check
 #include "../debug.hpp"
@@ -31,6 +30,13 @@ class Node{
         std::cout << "Node constructor" << std::endl;
         #endif
     }
+    // copy constructor
+    Node(const Node<T> &node):
+    _value{node.getValue()},
+    _next{node.getNext()}
+    {
+        // nothing to do
+    }
     #pragma endregion
 
 
@@ -57,4 +63,3 @@ class Node{
     void setNext(Node<T> *next){this->_next = next;}
     #pragma endregion
 };
-#endif
