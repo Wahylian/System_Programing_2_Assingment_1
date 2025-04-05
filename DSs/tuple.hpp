@@ -1,5 +1,4 @@
-#ifndef TUPLE
-#define TUPLE
+#pragma once
 #ifndef DEBUG
 // debug check
 #include "../debug.hpp"
@@ -30,6 +29,14 @@ class Tuple{
         std::cout << "Tuple constructor" << std::endl;
         #endif
     }
+
+    // copy constructor
+    Tuple(const Tuple<T, U> &tuple):
+    _first{T(tuple._first)},
+    _second{U(tuple._second)}
+    {
+        // nothing to do
+    }
     #pragma endregion
 
     #pragma region Getters
@@ -49,4 +56,3 @@ class Tuple{
     void setSecond(U second){this->_second = second;}
     #pragma endregion
 };
-#endif

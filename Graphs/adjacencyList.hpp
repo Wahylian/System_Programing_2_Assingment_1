@@ -1,5 +1,4 @@
-#ifndef NEIGHBORLIST
-#define NEIGHBORLIST
+#pragma once
 #ifndef DEBUG
 // debuging check
 #include "../debug.hpp"
@@ -13,15 +12,22 @@
 
 class AdjacencyList{
     private:
-    int n; // the num of vertices in the Adjacency
-    List<Vertex> vertices;
+    int _n; // the num of vertices in the AdjacencyList
+    int _m; // the num of edges in the AdjacencyList
+    List<Vertex> _vertices;
 
     public:
-    // creates a Adjacency list for num_vx vertices
+    // constructor
     AdjacencyList(int num_vx);
 
+    // copy constructor
+    AdjacencyList(const AdjacencyList &al);
+
     // returns the amount of vertices in the adjacency list
-    int getNumVx() const{return this->n;}
+    int getNumVx() const{return this->_n;}
+
+    // returns the amount of edges in the adjacency list
+    int getNumEdges() const{return this->_m;}
 
     // adds an edge between vertex v1 and vertex v2 of weight weight, replaces existing edge
     void addEdge(int v1, int v2, int weight=1);
@@ -29,10 +35,12 @@ class AdjacencyList{
     // remove edge between v1 and v2, if the edge doesn't exist throws an error
     void removeEdge(int v1, int v2);
 
+    // returns true if the edge (v1, v2) exists, else false
+    bool isEdgeExists(int v1, int v2) const;
+
     // returns vertex v
     const Vertex& getVertex(int v) const;
 
     // prints the list
     void print() const;
 };
-#endif

@@ -1,5 +1,4 @@
-#ifndef PRIOQUEUE
-#define PRIOQUEUE
+#pragma once
 #ifndef DEBUG
 // debug check
 #include "../debug.hpp"
@@ -27,6 +26,53 @@ class PriorityQueue{
         #ifdef DEBUG
         std::cout << "PriorityQueue constructor" << std::endl;
         #endif
+    }
+
+    // copy constructor
+    PriorityQueue(const PriorityQueue<T> &pQ):
+    _head{nullptr},
+    _last{nullptr},
+    _size{0}
+    {
+        // if pQ is empty, returns
+        if(pQ._size == 0)
+            return;
+
+            Node<Tuple<int, T>> *temp_other = pQ._head; // gets a pointer to the head of the other list
+        
+            // copies the first value in list
+    
+            // creates a new node with the value at head
+            this->_head = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+    
+            // advances temp_other
+            temp_other = temp_other->getNext();
+    
+            // points temp pointer at the head
+            Node<Tuple<int, T>> *temp = this->_head;
+            // points last at temp
+            this->_last = temp;
+    
+            // copies over every other value in queue
+            for(int i=1; i<pQ._size; i++){
+                // creates a new node with the value at temp_other
+                Node<Tuple<int, T>> *tNode = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+    
+                // advances temp_other
+                temp_other = temp_other->getNext();
+    
+                // points temp's next at it
+                temp->setNext(tNode);
+    
+                // points last at temp's next
+                this->_last = temp->getNext();
+    
+                // advance temp
+                temp = temp->getNext();
+            }
+    
+            // sets the size of the queue
+            this->_size = pQ._size;
     }
 
     // destructor
@@ -113,8 +159,8 @@ class PriorityQueue{
         if(priority < 0)
             throw std::invalid_argument{"priority must be non-negative"};
 
-        // creates a new Tuple from the value and its priority
-        Tuple<int, T> t = Tuple<int, T>(priority, value);
+        // creates a new Tuple from the copy of value and its priority
+        Tuple<int, T> t = Tuple<int, T>(priority, T(value));
 
         // creates a new node
         Node<Tuple<int, T>> *node = new Node<Tuple<int, T>>(t);
@@ -284,4 +330,3 @@ class PriorityQueue{
     }
     #pragma endregion
 };
-#endif

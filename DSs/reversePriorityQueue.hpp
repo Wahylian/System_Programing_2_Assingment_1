@@ -1,3 +1,4 @@
+#pragma once
 #include "priorityQueue.hpp"
 #ifndef DEBUG
 // debug check
@@ -13,17 +14,23 @@ template <typename T>
 class RevPriorityQueue{
     // the lower the priority the closer to the head of the queue
     private:
-    PriorityQueue<T> pQ;
+    PriorityQueue<T> _pQ;
 
     public:
     #pragma region Ctors & Dtors
     // constructor
     RevPriorityQueue():
-    pQ{PriorityQueue<T>()}
+    _pQ{PriorityQueue<T>()}
     {
         #ifdef DEBUG
         std::cout << "RevPriorityQueue constructor" << std::endl;
         #endif
+    }
+    // copy constructor
+    RevPriorityQueue(const RevPriorityQueue<T> &rPQ):
+    _pQ{rPQ._pQ}
+    {
+        // nothing to do here
     }
     #pragma endregion
 
@@ -33,16 +40,16 @@ class RevPriorityQueue{
 
     #pragma region Basic Utils
     // returns true if the queue is empty, else false
-    bool isEmpty() const{return this->pQ.isEmpty();}
+    bool isEmpty() const{return this->_pQ.isEmpty();}
 
     // returns the size of the queue
-    int size() const{return this->pQ.size();}
+    int size() const{return this->_pQ.size();}
 
     // returns a reference to the top value in the queue
-    T& top(){return this->pQ.top();}
+    T& top(){return this->_pQ.top();}
     
     // returns true if this queue contains value, else false
-    bool contains(const T &value) const{return this->pQ.contains(value);}
+    bool contains(const T &value) const{return this->_pQ.contains(value);}
     #pragma endregion
 
 
@@ -57,11 +64,11 @@ class RevPriorityQueue{
             throw std::invalid_argument{"priority must be non-negative"};
         
         // queues the value
-        this->pQ.enqueue(value, MAX_VAL-priority);
+        this->_pQ.enqueue(value, MAX_VAL-priority);
     }
 
     // removes the top value from the queue
-    T dequeue(){return this->pQ.dequeue();}
+    T dequeue(){return this->_pQ.dequeue();}
 
     // changes the priority of value
     void changePriority(T value, int priority=MAX_VAL){
@@ -70,7 +77,7 @@ class RevPriorityQueue{
             throw std::invalid_argument{"priority must be non-negative"};
         
         // changes the priority of the value
-        this->pQ.changePriority(value, MAX_VAL-priority);
+        this->_pQ.changePriority(value, MAX_VAL-priority);
     }
     #pragma endregion
 };

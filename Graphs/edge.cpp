@@ -1,9 +1,9 @@
 #include "edge.hpp"
 
 Edge::Edge(int vertex1, int vertex2, int weight):
-v{vertex1},
-u{vertex2},
-weight{weight}
+_v{vertex1},
+_u{vertex2},
+_weight{weight}
 {
     #ifdef DEBUG
     std::cout << "Edge constructor" << std::endl;
@@ -18,10 +18,18 @@ weight{weight}
         throw std::invalid_argument{"vertex2 cannot be negative"};
 }
 
+Edge::Edge(const Edge &e):
+_v{e._v},
+_u{e._u},
+_weight{e._weight}
+{
+    // nothing to do here
+}
+
 bool Edge::operator== (const Edge &e) const{
     // returns true if both edges go from vertex v to vertex u
     // ignores weight
-    if(this->v == e.getVertex1() && this->u == e.getVertex2())
+    if(this->_v == e.getVertex1() && this->_u == e.getVertex2())
         return true;
 
     return false;

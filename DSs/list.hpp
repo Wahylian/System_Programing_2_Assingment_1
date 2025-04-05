@@ -1,6 +1,4 @@
-#ifndef LIST
-#define LIST
-
+#pragma once
 #ifndef DEBUG
 // debuging check
 #include "../debug.hpp"
@@ -28,6 +26,53 @@ class List{
         #ifdef DEBUG
         std::cout << "List constructor" << std::endl;
         #endif
+    }
+
+    // copy constructor
+    List(const List<T>& list):
+    _start{nullptr},
+    _end{nullptr},
+    _size{0}
+    {  
+        // if list is empty, returns
+        if(list._size == 0)
+            return;
+
+        Node<T> *temp_other = list._start; // gets a pointer to the start of the other list
+        
+        // copies the first value in list
+
+        // creates a new node with the value at start
+        this->_start = new Node<T>(T(temp_other->getValue()));
+
+        // advances temp_other
+        temp_other = temp_other->getNext();
+
+        // points temp pointer at the start
+        Node<T> *temp = this->_start;
+        // points end at temp
+        this->_end = temp;
+
+        // copies over every other value in list
+        for(int i=1; i<list._size; i++){
+            // creates a new node with the value at temp_other
+            Node<T> *tNode = new Node<T>(T(temp_other->getValue()));
+
+            // advances temp_other
+            temp_other = temp_other->getNext();
+
+            // points temp's next at it
+            temp->setNext(tNode);
+
+            // points end at temp's next
+            this->_end = temp->getNext();
+
+            // advance temp
+            temp = temp->getNext();
+        }
+
+        // sets the size of the list
+        this->_size = list._size;
     }
 
     // destructor
@@ -76,8 +121,8 @@ class List{
     #pragma region Insert Functions
     // insert the value at the end of the list
     void insert(T value){
-        // creates a new node
-        Node<T> *node = new Node<T>(value);
+        // creates a new node with a copy of the original value
+        Node<T> *node = new Node<T>(T(value));
         
         // if the list is empty, points start and end at the new node
         if(this->isEmpty()){
@@ -109,8 +154,8 @@ class List{
         }
         
         // if the node is inserted in the beginning of the list or in the middle
-        // creates a new node
-        Node<T> *node = new Node<T>(value);
+        // creates a new node, with a copy of the original value
+        Node<T> *node = new Node<T>(T(value));
 
         // if the node is inserted in the beginning of the list
         if(i == 0){
@@ -287,7 +332,7 @@ class List{
     #pragma endregion
 
     // returns a reference to the value at index i
-    const T& getValue(int i) const {
+    T& getValue(int i) const {
         // if the index is out of range, throw an error
         if(i < 0 ||i >= this->_size)
             throw std::out_of_range{"index " + std::to_string(i) + " out of range"};
@@ -337,4 +382,3 @@ class List{
         return this->find(value) != -1;
     }
 };
-#endif

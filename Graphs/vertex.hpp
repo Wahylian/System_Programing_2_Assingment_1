@@ -1,5 +1,4 @@
-#ifndef VERTEX
-#define VERTEX
+#pragma once
 #ifndef DEBUG
 // debuging check
 #include "../debug.hpp"
@@ -13,18 +12,21 @@
 // it is built for a directional graph
 class Vertex{
     private:
-    int vertex_name;
-    List<Edge> edges; // the list of all edges of this vertex
+    int _vertex_name;
+    List<Edge> _edges; // the list of all edges of this vertex
 
     public:
     // constructor
-    Vertex(int vertex_name);    
+    Vertex(int vertex_name);   
+    
+    // copy constructor
+    Vertex(const Vertex &v);
 
     // returns the name of the vertex
-    int getVertexName() const {return this->vertex_name;}
+    int getVertexName() const {return this->_vertex_name;}
 
     // returns the number of edges that the vertex has
-    int getNumEdges() const {return this->edges.size();}
+    int getNumEdges() const {return this->_edges.size();}
 
     // returns true if there is an edge from this vertex to v
     bool isEdgeExists(const Vertex& v) const;
@@ -69,4 +71,3 @@ class Vertex{
     // returns false if this and v are the same, else true
     bool operator!= (const Vertex &v) const;
 };
-#endif
