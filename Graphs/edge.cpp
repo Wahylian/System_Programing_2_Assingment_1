@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "edge.hpp"
 
 Edge::Edge(int vertex1, int vertex2, int weight):
@@ -5,10 +6,6 @@ _v{vertex1},
 _u{vertex2},
 _weight{weight}
 {
-    #ifdef DEBUG
-    std::cout << "Edge constructor" << std::endl;
-    #endif
-
     // if vertex 1 is a negative number, throw an error
     if(vertex1<0)
         throw std::invalid_argument{"vertex1 cannot be negative"};

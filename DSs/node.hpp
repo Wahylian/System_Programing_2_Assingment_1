@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debuging check
-#include "../debug.hpp"
-#endif
 
 template <typename T>
 class Node{
@@ -17,18 +14,14 @@ class Node{
     _value{T()},
     _next{nullptr}
     {
-        #ifdef DEBUG
-        std::cout << "Node Default constructor" << std::endl;
-        #endif
+        // nothing to do
     }
     // constructor
     Node(T value, Node<T> *next=nullptr):
     _value{value},
     _next{next}
     {
-        #ifdef DEBUG
-        std::cout << "Node constructor" << std::endl;
-        #endif
+        // nothing to do
     }
     // copy constructor
     Node(const Node<T> &node):

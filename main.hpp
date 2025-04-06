@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "Graphs/graph.hpp"
 #include "Graphs/algorithm.hpp"
 #include <iostream>
@@ -16,7 +17,7 @@ void run_bfs(const Graph &g);
 // this function runs the dfs algorithm on graph g, and prints the dfs graph that was created
 void run_dfs(const Graph &g);
 
-// this function runs the dijakstra algorithm on graph g, and prints the graph of shortest paths that was created
+// this function runs the dijkstra algorithm on graph g, and prints the graph of shortest paths that was created
 void run_dijkstras(const Graph &g);
 
 // this function runs the prims algorithm on graph g, and prints the minimal spanning tree that was created
@@ -57,6 +58,7 @@ void select_option(Graph& g, int option){
         case 3:
             // removes edges from the graph
             remove_edges(g);
+            break;
         case 4:
             // runs BFS on the graph
             run_bfs(g);

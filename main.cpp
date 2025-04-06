@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "main.hpp"
 
 int choose_vertex(const Graph &g){
@@ -101,6 +102,11 @@ void add_edges(Graph& g){
 
 void remove_edges(Graph &g){
     std::cout << "The graph has " << g.numVertices() << " vertices" << std::endl;
+    if(g.numEdges() == 0){
+        std::cout << "The graph has no edges" << std::endl;
+        return;
+    }
+
     std::cout << "Please enter the edge you would like to remove:" << std::endl;
     int v1, v2;
 
@@ -170,13 +176,17 @@ void run_bfs(const Graph &g){
     // gets the starting vertex from the user
     std::cout << "Starting vertex:" << std::endl;
     unsigned int s = choose_vertex(g);
+    try{
+        // runs bfs using the starting vertex
+        Graph bfsGraph = a.bfs(g, s);
 
-    // runs bfs using the starting vertex
-    Graph bfsGraph = a.bfs(g, s);
-
-    // prints the graph
-    std::cout << "The BFS graph from vertex " << s << " is:" << std::endl;
-    bfsGraph.print_graph();
+        // prints the graph
+        std::cout << "The BFS graph from vertex " << s << " is:" << std::endl;
+        bfsGraph.print_graph();
+    }
+    catch(std::invalid_argument){ // if the bfs was attempted to run with an invalid vertex
+        std::cout << "BFS cannot run on this graph" << std::endl;
+    }
 }
 
 void run_dfs(const Graph &g){
@@ -201,17 +211,17 @@ void run_dijkstras(const Graph &g){
 
     // runs dijkstras using the starting vertex
     try{
-        Graph dijkstrasGraph = a.dijakstra(g, s);
+        Graph dijkstrasGraph = a.dijkstra(g, s);
 
         // prints the graph
         std::cout << "The graph of shortest paths from vertex " << s << " is:" << std::endl;
         dijkstrasGraph.print_graph();
     }
-    catch(std::invalid_argument){ // if the dijakstra was attempted to run with an invalid vertex
-        std::cout << "Problematic Vertex" << std::endl;
+    catch(std::invalid_argument){ // if the dijkstra was attempted to run with an invalid vertex
+        std::cout << "Dijkstra cannot run on this graph" << std::endl;
     }
     catch(std::runtime_error){ // if the graph contains a negative edge
-        std::cout << "The Dijakstra algorithm doesn't run on graphs with negative edges" << std::endl;
+        std::cout << "The Dijkstra algorithm doesn't run on graphs with negative edges" << std::endl;
     }
 }
 
@@ -220,23 +230,34 @@ void run_prims(const Graph &g){
     Algorithms a = Algorithms();
 
     // runs prims on the graph
-    Graph primsGraph = a.prim(g);
+    try{
+        Graph primsGraph = a.prim(g);
 
-    // prints the graph
-    std::cout << "The minimal spanning tree based on Prim's algorithm is:" << std::endl;
-    primsGraph.print_graph();
+        // prints the graph
+        std::cout << "The minimal spanning tree based on Prim's algorithm is:" << std::endl;
+        primsGraph.print_graph();
+    }
+    catch(std::invalid_argument){ // if the prims was attempted to run on an empty graph
+        std::cout << "The graph is empty" << std::endl;
+    }
+
 }
 
 void run_kruskals(const Graph &g){
     // creates an instance of an algorithms object
     Algorithms a = Algorithms();
 
-    // runs kruskals on the graph
-    Graph kruskalsGraph = a.kruskal(g);
+    try{
+        // runs kruskals on the graph
+        Graph kruskalsGraph = a.kruskal(g);
 
-    // prints the graph
-    std::cout << "The minimal spanning tree based on Kruskals' algorithm is:" << std::endl;
-    kruskalsGraph.print_graph();
+        // prints the graph
+        std::cout << "The minimal spanning tree based on Kruskals' algorithm is:" << std::endl;
+        kruskalsGraph.print_graph();
+    }
+    catch(std::invalid_argument){ // if the kruskals was attempted to run on an empty graph
+        std::cout << "The graph is empty" << std::endl;
+    }
 }
 
 int main(){

@@ -1,10 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debuging check
-#include "../debug.hpp"
-#endif
-#define DEBUG_PRIM
-#include <iostream>
 #include "node.hpp"
 #include <stdexcept>
 
@@ -24,9 +19,7 @@ class List{
     _end{nullptr},
     _size{0}
     {
-        #ifdef DEBUG
-        std::cout << "List constructor" << std::endl;
-        #endif
+        // nothing to do
     }
 
     // copy constructor
@@ -78,9 +71,6 @@ class List{
 
     // destructor
     ~List(){
-        #ifdef DEBUG
-        std::cout << "List destructor" << std::endl;
-        #endif
         // deletes all nodes in the list
         Node<T> *temp = this->_start;
         while(temp != nullptr){
@@ -148,17 +138,8 @@ class List{
         if(i < 0 || i > this->_size) // allows for i == size, since that will add at the end of the list
             throw std::out_of_range{"index" + std::to_string(i) + " is out of range"};
 
-        #ifdef DEBUG_PRIM
-        std::cout <<"end is "<< this->_end->getValue()<<std::endl;
-        #endif
-
         // if the list is empty, or i == size, calls the other insert function to add the value
         if(this->isEmpty() || i == this->_size){
-            #ifdef DEBUG_PRIM
-            std::cout <<"inserting at end of list"<< std::endl;
-            
-
-            #endif
             this->insert(value);
             return;
         }

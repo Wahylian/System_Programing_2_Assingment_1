@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debug check
-#include "../debug.hpp"
-#endif
 #include <stdexcept>
 #include "node.hpp"
 class UnionFind{

@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debug check
-#include "../debug.hpp"
-#endif
 template <typename T, typename U>
 class Tuple{
     private:
@@ -16,18 +13,14 @@ class Tuple{
     _first{T()},
     _second{U()}
     {
-        #ifdef DEBUG
-        std::cout << "Tuple Default constructor" << std::endl;
-        #endif
+        // nothing to do
     }
     // constructor
     Tuple(T first, U second):
     _first{first},
     _second{second}
     {
-        #ifdef DEBUG
-        std::cout << "Tuple constructor" << std::endl;
-        #endif
+        // nothing to do
     }
 
     // copy constructor

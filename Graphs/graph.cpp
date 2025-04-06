@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "graph.hpp"
 namespace graph{
     Graph::Graph(int n):
@@ -78,5 +79,42 @@ namespace graph{
     
     bool Graph::isEdgeExists(const Edge &e) const{
         return this->_al.isEdgeExists(e.getVertex1(), e.getVertex2());
+    }
+
+    bool Graph::operator== (const Graph &g) const{
+        // checks if both graphs have the same amount of vertices
+        if(this-> _n != g._n)
+            return false;
+        
+        // checks if both graphs have the same amount of edges
+        if(this->numEdges() != g.numEdges())
+            return false;
+        
+        // checks if both graphs have the same edges
+        List<Edge> this_edges = this->getEdges();
+        List<Edge> g_edges = g.getEdges();
+
+        // going over each edge in this graph
+        for(int i=0; i<this_edges.size(); i++){
+            // gets the i-th edge in this graph
+            const Edge &e_this = this_edges.getValue(i);
+
+            bool found = false;
+            // checks if e_this exists in g_edges
+            for(int j=0; j<g_edges.size(); j++){
+                const Edge &e_g = g_edges.getValue(j);
+                // checks that e is the same as e_g
+                if(e_this == e_g && e_this.getWeight() == e_g.getWeight()){
+                    found = true;
+                    break;
+                }
+            }
+
+            // if e was not found return false
+            if(!found)
+                return false;
+        }
+        // if all edges were found return true
+        return true;
     }
 }

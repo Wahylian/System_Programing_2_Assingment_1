@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debuging check
-#include "../debug.hpp"
-#endif
 // this class uses generics, example taken from https://www.geeksforgeeks.org/generics-in-c/
 
 #include "vertex.hpp"

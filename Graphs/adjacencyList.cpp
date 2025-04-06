@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "adjacencyList.hpp"
 
 AdjacencyList::AdjacencyList(int num_vx):

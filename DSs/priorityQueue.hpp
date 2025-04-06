@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debug check
-#include "../debug.hpp"
-#endif
 #include <stdexcept>
 #include "node.hpp"
 #include "tuple.hpp"
@@ -23,9 +20,7 @@ class PriorityQueue{
     _last{nullptr},
     _size{0}
     {
-        #ifdef DEBUG
-        std::cout << "PriorityQueue constructor" << std::endl;
-        #endif
+        // nothing to do
     }
 
     // copy constructor

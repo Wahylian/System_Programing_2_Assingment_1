@@ -1,8 +1,8 @@
+// rido1607@gmail.com
 #pragma once
 #include "graph.hpp"
 #include "../DSs/reversePriorityQueue.hpp"
 #include "../DSs/unionFind.hpp"
-#define DEBUG_PRIM
 namespace graph{
     class Algorithms{
         private:
@@ -25,8 +25,8 @@ namespace graph{
         Graph dfs(const Graph &g);
     
         // recieves a graph and a starting vertex and returns a graph of shortest paths to all vertices in the graph
-        // uses dijakstra
-        Graph dijakstra(const Graph &g, int s);
+        // uses dijkstra
+        Graph dijkstra(const Graph &g, int s);
     
         // recieves a graph and creates a minimal spanning tree of that graph
         // uses prim's algorithm

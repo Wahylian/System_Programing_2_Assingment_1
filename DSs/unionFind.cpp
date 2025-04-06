@@ -1,12 +1,11 @@
+// rido1607@gmail.com
 #include "unionFind.hpp"
 
 UnionFind::UnionFind(int num_vx):   
 _n{num_vx},
 _vertices{nullptr} 
 {   
-    #ifdef DEBUG
-    std::cout << "UnionFind constructor" << std::endl;
-    #endif
+
     // if n is non positive, throw an error, as there must be at least one vertex in the unionFind
     if(this->_n <= 0)
         throw std::invalid_argument{"there must be at least one vertex in the UnionFind"};

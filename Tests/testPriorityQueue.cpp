@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "doctest.h"
 #include "../DSs/priorityQueue.hpp"
 #include "../Graphs/edge.hpp"
@@ -201,30 +202,23 @@ TEST_CASE("Checking priority"){
         CHECK(pQ.isEmpty() == true);
 
         // enqueuing multiple values into the queue with increasing priorities
-        for(int i=0; i<10; i++)
+        for(int i=-10; i<10; i++)
             pQ.enqueue(i, i);
         
         // checks the size is correct
-        CHECK(pQ.size() == 10);
+        CHECK(pQ.size() == 20);
 
         // checking all values are in the queue
-        for(int i=0; i<10; i++)
+        for(int i=-10; i<10; i++)
             CHECK(pQ.contains(i) == true);
         
         // since the values are enqueued with a priority equal to them, 
         // the priority queue should act like a stack
-        for(int i=0; i<10; i++)
-            CHECK(pQ.dequeue() == 9-i);
+        for(int i=-10; i<10; i++)
+            CHECK(pQ.dequeue() == -i-1);
         
         // checks the queue is empty
         CHECK(pQ.isEmpty() == true);
-    }
-
-    SUBCASE("Enqueueing with negative priority"){
-        PriorityQueue<int> pQ = PriorityQueue<int>();
-
-        // checks that the function throws an error on enqueueing with a negative priority
-        CHECK_NOTHROW(pQ.enqueue(5, -2));
     }
 }
 
@@ -285,19 +279,6 @@ TEST_CASE("Change Priority"){
 
         // attempts to change the priority of -5
         CHECK_THROWS(pQ.changePriority(-5, 10));
-    }
-
-    SUBCASE("Changes Priority with a negative Priority"){
-        PriorityQueue<int> pQ = PriorityQueue<int>();
-
-        // enqueues a value
-        pQ.enqueue(5, 20);
-
-        // checks that 5 is in the queue
-        CHECK(pQ.contains(5) == true);
-
-        // changes the priority of 5 into a negative number
-        CHECK_NOTHROW(pQ.changePriority(5, -19));
     }
 }
 

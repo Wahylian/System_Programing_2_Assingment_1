@@ -1,12 +1,10 @@
+// rido1607@gmail.com
 #include "vertex.hpp"
 
 Vertex::Vertex(int vertex_name):
 _vertex_name{vertex_name},
 _edges{List<Edge>()}
 {
-    #ifdef DEBUG
-    std::cout << "Vertex constructor" << std::endl;
-    #endif
     // the name of the vertex must be none negative
     if(vertex_name < 0)
         throw std::invalid_argument{"vertex_name must be none negative"};

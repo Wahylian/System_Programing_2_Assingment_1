@@ -1,9 +1,6 @@
+// rido1607@gmail.com
 #pragma once
 #include "priorityQueue.hpp"
-#ifndef DEBUG
-// debug check
-#include "../debug.hpp"
-#endif
 
 
 template <typename T>
@@ -18,9 +15,7 @@ class RevPriorityQueue{
     RevPriorityQueue():
     _pQ{PriorityQueue<T>()}
     {
-        #ifdef DEBUG
-        std::cout << "RevPriorityQueue constructor" << std::endl;
-        #endif
+        // nothing to do
     }
     // copy constructor
     RevPriorityQueue(const RevPriorityQueue<T> &rPQ):

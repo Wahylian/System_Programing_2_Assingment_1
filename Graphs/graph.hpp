@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #pragma once
 #include <iostream>
 #include "adjacencyList.hpp"
@@ -50,6 +51,12 @@ namespace graph{
 
         // returns the number of edges in the graph
         int numEdges() const;
+
+        // returns true if this graph is the same as g, else false
+        bool operator== (const Graph &g) const;
+
+        // returns true if this graph is not the same as g, else false
+        bool operator!= (const Graph &g) const{return !(*this == g);}
     };
 }
 

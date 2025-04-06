@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "algorithm.hpp"
 namespace graph{
     Graph Algorithms::bfs(const Graph &g, int s){
@@ -142,7 +143,7 @@ namespace graph{
         blacks.insert(v);
     }
 
-    Graph Algorithms::dijakstra(const Graph &g, int s){
+    Graph Algorithms::dijkstra(const Graph &g, int s){
         // checks that s is a valid vertex
         if(s < 0 || s >= g.numVertices())
             throw std::invalid_argument{"Vertex " + std::to_string(s) + " is not a legal vertex in the graph"};
@@ -166,10 +167,13 @@ namespace graph{
         // sets the distance of s to 0
         d.pop(s);
         d.insert(0, s); // the distance of s from itself is 0
+        // changes the priority of s in the queue to 0
+        pQ.changePriority(s, 0);
         
         // going over the queue while it is not empty
         while(!pQ.isEmpty()){
             int u = pQ.dequeue(); // gets the vertex with the lowest distance from s
+
             // gets the vertex u from g
             Vertex ux = g.getVertex(u);
             // gets all the edges of u
@@ -213,13 +217,29 @@ namespace graph{
         // gets the vertices of e
         int u = e.getVertex1();
         int v = e.getVertex2();
-
+        
         // checks if the edge the vertex hasn't converged already
         if(q.isEmpty() || !q.contains(v))
             return; // if the queue is empty or v is not in the queue, it means it has converged
 
+        if(d.getValue(u) == d.getValue(v) && d.getValue(u) == __INT32_MAX__){
+            // if both u and v are at the default value, it means they are not reachable from s for now
+            // so we don't need to relax the edge
+            return;
+        }
+
+        // if the u and v have the same distance from s, and e has 0 weight, and v's parent is not u
+        // sets u's parent to uv
+        if(d.getValue(u) == d.getValue(v) && e.getWeight() == 0 && pi.getValue(v) != u){
+            // sets the parent of u to v
+            pi.pop(u);
+            pi.insert(v, u);
+            return;
+        }
+        
+
         // calculates the possible new distance of v from s
-        int newDistance = d.getValue(u) + e.getWeight(); 
+        int newDistance = d.getValue(u) + e.getWeight();  
 
         // checks if the distance of v from s is bigger than the distance of u from s + the weight of e
         if(d.getValue(v) > newDistance){
@@ -230,7 +250,7 @@ namespace graph{
             pi.insert(u, v);
             // changes the distance of v to the new distance
             d.pop(v);
-            d.insert(newDistance);
+            d.insert(newDistance, v);
         }
     }
     
@@ -255,14 +275,6 @@ namespace graph{
             // sets the key of each vertex v to INT32_MAX, as that is the default priority in q
             key.insert(__INT32_MAX__);
         }
-        #ifdef DEBUG_PRIM
-        std::cout <<"size of pi: " << pi.size() << std::endl;
-        std::cout << "printing pi: " << std::endl;
-
-        for(int i=0; i<pi.size(); i++)
-            std::cout << pi.getValue(i) << " ";
-        std::cout << std::endl;
-        #endif
             
         // gets a vertex from g as the starting point
         int s = 0;
@@ -275,22 +287,10 @@ namespace graph{
         while(!pQ.isEmpty()){
             // gets the lowest priority vertex from the queue
             int u = pQ.dequeue();
-            
-            #ifdef DEBUG_PRIM
-            std::cout << "dequeued u="<<u<< std::endl;
-            #endif
 
             const Vertex &ux = g.getVertex(u); // gets the vertex u from g
             // gets all the edges of u
             const List<Edge> &u_edges = ux.getEdges();
-
-            #ifdef DEBUG_PRIM
-            std::cout << "edges of " <<u <<":"<< std::endl;
-            for(int i=0; i<u_edges.size(); i++){
-                std::cout << u_edges.getValue(i).to_string() << std::endl;
-            }
-
-            #endif
 
             // going over each edge in u
             for(int i=0; i<u_edges.size(); i++){
@@ -299,41 +299,11 @@ namespace graph{
 
                 // checks if v is in the queue
                 if(!pQ.isEmpty() && pQ.contains(v)){
-                    #ifdef DEBUG_PRIM
-                    std::cout << "checking edge " << e.to_string() << std::endl;
-                    std::cout <<"key of "<<v<<": "<< key.getValue(v) << std::endl;
-                    #endif
-
                     // checks if the weight of e is smaller than the key of v
                     if(e.getWeight() < key.getValue(v)){
-                        #ifdef DEBUG_PRIM
-                        std::cout << "found a smaller edge: " << e.to_string() << std::endl;
-                        #endif
-
-                        #ifdef DEBUG_PRIM
-                        std::cout << "popping v: " << v << std::endl;
-                        #endif
                         // if it is, changes the parent of v to u
                         pi.pop(v);
-
-                        #ifdef DEBUG_PRIM
-                        std::cout << "print pi "<<pi.size() << std::endl;
-                        for(int i =0; i<pi.size(); i++)
-                            std::cout <<pi.getValue(i) << " ";
-                        std::cout << std::endl;
-                        #endif
-
-                        #ifdef DEBUG_PRIM
-                        std::cout << "inserting v: " << v << " with parent u: " <<u<< std::endl;
-                        #endif
                         pi.insert(u, v);
-
-                        #ifdef DEBUG_PRIM
-                        std::cout << "print pi "<<pi.size() << std::endl;
-                        for(int i =0; i<pi.size(); i++)
-                            std::cout <<pi.getValue(i) << " ";
-                        std::cout << std::endl;
-                        #endif
 
                         // sets the priority of v to the weight of e
                         key.pop(v);
@@ -343,22 +313,8 @@ namespace graph{
                     }
                 }
             }
-
-            #ifdef DEBUG_PRIM
-            std::cout << "pi after adding relevant edges of "<<u<<":"<< std::endl;
-            for(int i =0; i<pi.size(); i++)
-                std::cout <<pi.getValue(i) << " ";
-            std::cout << std::endl;
-            #endif
         }
 
-        #ifdef DEBUG_PRIM
-        std::cout <<"size of pi: " << pi.size() << std::endl;
-        std::cout << "printing pi: " << std::endl;
-
-        for(int i=0; i<pi.size(); i++)
-            std::cout << pi.getValue(i) << " ";
-        #endif
         // after going over all the vertices in g
         // creates a new graph
         Graph newGraph = Graph(g.numVertices());
@@ -367,22 +323,12 @@ namespace graph{
 
         // going over each vertex in g, apart from s, as it has no pi[s]
         for(int i=1; i<g.numVertices(); i++){
-            #ifdef DEBUG_PRIM
-            std::cout << "getting vertex: "<< i<< std::endl;
-            #endif
             // gets pi[i]
             int pi_i = pi.getValue(i);
             // checks if pi[i] is not -1, meaning it has a parent
             if(pi_i != -1){
-                #ifdef DEBUG_PRIM
-                std::cout << "getting vertex: "<< i<< std::endl;
-                #endif
-
                 // gets the edge between i and pi[i] in g
                 const Vertex &vx = g.getVertex(i);
-                #ifdef DEBUG_PRIM
-                std::cout << "adding edge: "<< vx.getEdge(pi_i).to_string()<< std::endl;
-                #endif
                 const Edge &e = vx.getEdge(pi_i);
 
                 
@@ -390,10 +336,6 @@ namespace graph{
                 newEdges.insert(e);
             }
         }
-
-        #ifdef DEBUG_PRIM
-        std::cout << "test 3: " << std::endl;
-        #endif
         // adds all the edges in newEdges to newGraph
         for(int i=0; i<newEdges.size(); i++)
             newGraph.addEdge(newEdges.getValue(i));
@@ -401,91 +343,11 @@ namespace graph{
         // returns the new graph
         return newGraph;
     }
-    /*
-    Graph Algorithms::prim(const Graph &g){
-        // creates a priority queue
-        RevPriorityQueue<int> q = RevPriorityQueue<int>();
-    
-        // creates a list pi in which pi[v] is the parent of vertex v in g
-        List<int> pi = List<int>();
-        // creates a list key holding the priorities of each vertex v in g
-        List<int> key = List<int>();
-        
-        for(int i=0; i<g.numVertices(); i++){
-            // sets the pi of each vertex v to -1 as a default value, representing it has no parent so far
-            pi.insert(-1);
-    
-            // sets the key of each vertex v to INT32_MAX, as that is the default priority in q
-            key.insert(__INT32_MAX__);
-        }
-        for(int i=0; i<g.numVertices(); i++)
-            // inserts each vertex of g to q with the default priority
-            q.enqueue(i);
-    
-        // sets the priority of vertex 0 in g to 0
-        q.changePriority(0, 0);
-        key.pop(0);
-        key.insert(0, 0); // inserts priority 0 for vertex 0
-    
-        // while q is not empty
-        while(!q.isEmpty()){
-            // remove vertex v from q
-            int v = q.dequeue();
-            Vertex vx = g.getVertex(v);
-    
-            // get all the edges in vx
-            List<Edge> vx_edges = vx.getEdges();
-    
-            // going over each adjacent vertex to v
-            for(int i=0; i<vx_edges.size(); i++){ 
-                // gets an adjacent vertex to v
-                Edge e = vx_edges.getValue(i);
-                int u = e.getVertex2();
-    
-                // check if q contains u
-                if(q.contains(u)){
-                    // checks if the weight of e is smaller than the key of u
-                    if(e.getWeight() < key.getValue(u)){
-                        // if it is, changes the parent of u to v
-                        pi.remove(u);
-                        pi.insert(v, u); // sets the parent of u to v
-                        // and sets the priority of u to the weight of e
-                        key.pop(u);
-                        key.insert(e.getWeight(), u);
-                        q.changePriority(u, e.getWeight()); // changes it in the queue as well
-                    }
-                }
-            }
-        }
-        
-        // the edges of the MST will be the edges from each v to pi[v]
-        List<Edge> newEdges = List<Edge>();
-    
-        // since i = 0 is the starting point, it has no pi and so it is skipped
-        for(int i=1; i<g.numVertices(); i++){
-            
-            Vertex vx = g.getVertex(i);
-            // gets the edge bewteen i and pi[i]
-            if(vx.isEdgeExists(pi.getValue(i))){
-                Edge e = vx.getEdge(pi.getValue(i));
-    
-                // adds the edge to newEdges
-                newEdges.insert(e);
-            }
-        }
-    
-        // creates a new graph
-        Graph newGraph = Graph(g.numVertices());
-    
-        // adds the edges to the graph
-        for(int i=0; i<newEdges.size(); i++)
-            newGraph.addEdge(newEdges.getValue(i));
-        
-        // returns the new Graph
-        return newGraph;
-    }*/
     
     Graph Algorithms::kruskal(const Graph &g){
+        if(g.numVertices() == 0) // make sure the graph is not empty
+            throw std::invalid_argument{"Graph is empty!"};
+
         // get all edges of g
         List<Edge> edges = g.getEdges();
     

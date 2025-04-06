@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "doctest.h"
 #include "../Graphs/graph.hpp"
 using namespace graph;
@@ -349,4 +350,72 @@ TEST_CASE("Test Memory Leak"){
 
     // deletes the graph
     delete g;
+}
+
+TEST_CASE("Test Operator== and Operator!="){
+    // check the graph against the exact same object
+    SUBCASE("Exact same Graph"){
+        Graph g = Graph(5);
+
+        g.addEdge(1, 3, 0);
+        g.addEdge(3, 2, 8);
+        g.addEdge(0, 4, -1);
+
+        // checks that that g is the same as itself
+        CHECK(g == g);
+        CHECK((g != g) == false);
+    }
+    // check the graph against an exact replica of it
+    SUBCASE("Exact Replica"){
+        Graph g1 = Graph(5);
+        Graph g2 = Graph(5);
+
+        // checks they are equal when empty
+        CHECK(g1 == g2);
+        CHECK((g1 != g2) == false);
+
+        // adds edges to both graphs
+        g1.addEdge(1, 3, 0);
+        g1.addEdge(3, 2, 8);
+        g1.addEdge(0, 4, -1);
+        g2.addEdge(1, 3, 0);
+        g2.addEdge(3, 2, 8);
+        g2.addEdge(0, 4, -1);
+
+        // checks they are equal
+        CHECK(g1 == g2);
+        CHECK((g1 != g2) == false);
+    }
+    // check the graph against a graph with the same edges but different weights
+    SUBCASE("Same Edges, Different Weights"){
+        Graph g1 = Graph(5);
+        Graph g2 = Graph(5);
+
+        // adds edges to both graphs
+        g1.addEdge(1, 3, 0);
+        g1.addEdge(3, 2, 8);
+        g1.addEdge(0, 4, -1);
+        g2.addEdge(1, 3, 2);
+        g2.addEdge(3, 2, -8);
+        g2.addEdge(0, 4, -1);
+
+        // checks they are not equal
+        CHECK(g1 != g2);
+        CHECK((g1 == g2) == false);
+    }
+    SUBCASE("Different Graphs"){
+        Graph g1 = Graph(5);
+        Graph g2 = Graph(4);
+
+        // adds edges to both graphs
+        g1.addEdge(1, 3, 0);
+        g1.addEdge(3, 2, 8);
+        g1.addEdge(0, 4, -1);
+        g2.addEdge(1, 3, 2);
+        g2.addEdge(3, 2, -8);
+
+        // checks they are not equal
+        CHECK(g1 != g2);
+        CHECK((g1 == g2) == false);
+    }
 }

@@ -1,3 +1,4 @@
+// rido1607@gmail.com
 #include "doctest.h"
 #include "../DSs/list.hpp"
 #include "../Graphs/edge.hpp"
@@ -135,54 +136,128 @@ TEST_CASE("Testing List Insert"){
 }
 
 TEST_CASE("Testing List Remove"){
-    // creates an instance of a list
-    List<int> list;
-
     // checks that the remove function fails on an empty list
     SUBCASE("Remove from empty list"){
+        // creates an instance of a list
+        List<int> list;
+
         CHECK_THROWS(list.remove(0));
     }
-
-    // inserts multiple values to list
-    for(int i = 0; i < 10; i++)
-        list.insert(i);
     
     // checks that the remove function returns true on removal of an existing value
     SUBCASE("Remove an existing value"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
+
         CHECK(list.remove(5) == true);
     }
 
     // check that the remove function returns false on removal of a non-existing value
     SUBCASE("Remove a non-existing value"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
+
         CHECK(list.remove(15) == false);
+    }
+
+    // checks that the remove function will not cause an error upon removing the final value
+    SUBCASE("Remove the last value"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
+
+        // checks that the size of the list is 10
+        CHECK(list.size() == 10);
+
+        // removes the last value in the list
+        CHECK(list.remove(9) == true);
+
+        // checks that the size of the list is now 9
+        CHECK(list.size() == 9);
+
+        // attempt to insert a value to the queue
+        CHECK_NOTHROW(list.insert(20));
+        // checks that the list now has a size of 10
+        CHECK(list.size() == 10);
+        // checks that the value at index 9 is now 20
+        CHECK(list.getValue(9) == 20);
+    }
+
+    SUBCASE("Removing everything and readding it"){
+        // creates an instance of a list
+        List<int> list = List<int>();
+
+        // inserts multiple values to list
+        for(int i=0; i<10; i++)
+            list.insert(i);
+        // checks that the size of the list is 10
+        CHECK(list.size() == 10);
+        // removes all values from the list
+        for(int i=9; i>=0; i--)
+            CHECK(list.remove(i)== true);
+        // checks that the size of the list is 0
+        CHECK(list.size() == 0);
+        
+        // attempts to reinsert the values
+        for(int i=0; i<10; i++)
+            CHECK_NOTHROW(list.insert(i)); // checks no error is thrown
+        
+        // checks that the size of the list is 10
+        CHECK(list.size() == 10);
     }
 }
 
 TEST_CASE("Testing List Popping"){
-    // creates an instance of a list
-    List<int> list;
-
     // checks that the pop function fails on an empty list
     SUBCASE("Pop from empty list"){
+        // creates an instance of a list
+        List<int> list;
+
         CHECK_THROWS(list.pop());
     }
 
-    // inserts multiple values to list
-    for(int i = 0; i < 10; i++)
-        list.insert(i);
-
     // checks that the pop function fails on an out of range index
     SUBCASE("Pop from out of range index"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
+
         CHECK_THROWS(list.pop(15));
     }
 
     // checks that the pop function fails on a negative index
     SUBCASE("Pop at negative index"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
         CHECK_THROWS(list.pop(-3));
     }
 
     // checks that the pop function returns the correct value
     SUBCASE("Pop value at index 4"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
         // checks that the size of the list is 10
         CHECK(list.size() == 10);
 
@@ -195,6 +270,12 @@ TEST_CASE("Testing List Popping"){
 
     // popping at end of list
     SUBCASE("Pop at the end of the list"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
         // saves the size of the list
         int size = list.size();
         // pops the last value in the list
@@ -204,6 +285,32 @@ TEST_CASE("Testing List Popping"){
 
         // attempt to insert a value to the end of the list
         CHECK_NOTHROW(list.insert(20, size-1));
+    }
+
+    // popping all the values in the list 
+    SUBCASE("Pop everything and Reinsert it"){
+        // creates an instance of a list
+        List<int> list;
+
+        // inserts multiple values to list
+        for(int i = 0; i < 10; i++)
+            list.insert(i);
+        
+        // checks that the size of the list is 10
+        CHECK(list.size() == 10);
+
+        // pops all the values in the list from the end
+        for(int i = 9; i >= 0; i--){
+            // checks that the value popped is i
+            CHECK(list.pop(i) == i);
+        }
+
+        // checks that the size of the list is 0
+        CHECK(list.size() == 0);
+
+        // attempts to reinsert the values
+        for(int i = 0; i < 10; i++)
+            CHECK_NOTHROW(list.insert(i));
     }
 }
 

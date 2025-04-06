@@ -1,8 +1,5 @@
+// rido1607@gmail.com
 #pragma once
-#ifndef DEBUG
-// debuging check
-#include "../debug.hpp"
-#endif
 #include <stdexcept>
 #include <iostream>
 #include "../DSs/list.hpp"
