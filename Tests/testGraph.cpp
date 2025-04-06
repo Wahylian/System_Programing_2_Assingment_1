@@ -1,5 +1,6 @@
 #include "doctest.h"
 #include "../Graphs/graph.hpp"
+using namespace graph;
 
 TEST_CASE("Graph Initialization"){
     SUBCASE("Valid Graph"){

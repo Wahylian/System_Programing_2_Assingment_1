@@ -1,5 +1,5 @@
 CXX=clang++
-CXXFLAGS=-std=c++2a 
+CXXFLAGS=-Wall -Werror -std=c++2a 
 
 # object files for the data structures
 OBJS_DS = DSs/list.o DSs/node.o DSs/priorityQueue.o DSs/reversePriorityQueue.o \

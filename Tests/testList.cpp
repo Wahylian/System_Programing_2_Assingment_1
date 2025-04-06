@@ -192,6 +192,19 @@ TEST_CASE("Testing List Popping"){
         // checks that the size of the list is now 9
         CHECK(list.size() == 9);
     }
+
+    // popping at end of list
+    SUBCASE("Pop at the end of the list"){
+        // saves the size of the list
+        int size = list.size();
+        // pops the last value in the list
+        CHECK(list.pop(size-1) == size-1);
+        // checks that the size of the list is now size-1
+        CHECK(list.size() == size-1);
+
+        // attempt to insert a value to the end of the list
+        CHECK_NOTHROW(list.insert(20, size-1));
+    }
 }
 
 TEST_CASE("Test getValue"){

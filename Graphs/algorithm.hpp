@@ -2,6 +2,7 @@
 #include "graph.hpp"
 #include "../DSs/reversePriorityQueue.hpp"
 #include "../DSs/unionFind.hpp"
+#define DEBUG_PRIM
 namespace graph{
     class Algorithms{
         private:

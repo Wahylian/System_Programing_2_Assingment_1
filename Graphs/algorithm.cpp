@@ -234,6 +234,174 @@ namespace graph{
         }
     }
     
+    
+    Graph Algorithms::prim(const Graph &g){
+        if(g.numVertices() == 0) // make sure the graph is not empty
+            throw std::invalid_argument{"Graph is empty!"};
+
+        // creates a list pi in which pi[v] is the parent of vertex v in g
+        List<int> pi = List<int>();
+        // creates a list key in which key[v] is the priority of vertex v in g
+        List<int> key = List<int>();
+
+        // inserts all the vertices of g to a priority queue with the highest proprity
+        RevPriorityQueue<int> pQ = RevPriorityQueue<int>();
+        for(int i=0; i<g.numVertices(); i++){
+            // enqueues vertex i
+            pQ.enqueue(i, __INT32_MAX__);
+
+            // sets the pi of each vertex v to -1 as a default value, representing it has no parent so far
+            pi.insert(-1);
+            // sets the key of each vertex v to INT32_MAX, as that is the default priority in q
+            key.insert(__INT32_MAX__);
+        }
+        #ifdef DEBUG_PRIM
+        std::cout <<"size of pi: " << pi.size() << std::endl;
+        std::cout << "printing pi: " << std::endl;
+
+        for(int i=0; i<pi.size(); i++)
+            std::cout << pi.getValue(i) << " ";
+        std::cout << std::endl;
+        #endif
+            
+        // gets a vertex from g as the starting point
+        int s = 0;
+        // sets the key of s to 0
+        pQ.changePriority(s, 0);
+        key.pop(s);
+        key.insert(0, s); // inserts priority 0 for vertex s
+
+        // while the queue is not empty
+        while(!pQ.isEmpty()){
+            // gets the lowest priority vertex from the queue
+            int u = pQ.dequeue();
+            
+            #ifdef DEBUG_PRIM
+            std::cout << "dequeued u="<<u<< std::endl;
+            #endif
+
+            const Vertex &ux = g.getVertex(u); // gets the vertex u from g
+            // gets all the edges of u
+            const List<Edge> &u_edges = ux.getEdges();
+
+            #ifdef DEBUG_PRIM
+            std::cout << "edges of " <<u <<":"<< std::endl;
+            for(int i=0; i<u_edges.size(); i++){
+                std::cout << u_edges.getValue(i).to_string() << std::endl;
+            }
+
+            #endif
+
+            // going over each edge in u
+            for(int i=0; i<u_edges.size(); i++){
+                const Edge &e = u_edges.getValue(i); // gets an edge from u
+                int v = e.getVertex2(); // gets the other vertex of the edge
+
+                // checks if v is in the queue
+                if(!pQ.isEmpty() && pQ.contains(v)){
+                    #ifdef DEBUG_PRIM
+                    std::cout << "checking edge " << e.to_string() << std::endl;
+                    std::cout <<"key of "<<v<<": "<< key.getValue(v) << std::endl;
+                    #endif
+
+                    // checks if the weight of e is smaller than the key of v
+                    if(e.getWeight() < key.getValue(v)){
+                        #ifdef DEBUG_PRIM
+                        std::cout << "found a smaller edge: " << e.to_string() << std::endl;
+                        #endif
+
+                        #ifdef DEBUG_PRIM
+                        std::cout << "popping v: " << v << std::endl;
+                        #endif
+                        // if it is, changes the parent of v to u
+                        pi.pop(v);
+
+                        #ifdef DEBUG_PRIM
+                        std::cout << "print pi "<<pi.size() << std::endl;
+                        for(int i =0; i<pi.size(); i++)
+                            std::cout <<pi.getValue(i) << " ";
+                        std::cout << std::endl;
+                        #endif
+
+                        #ifdef DEBUG_PRIM
+                        std::cout << "inserting v: " << v << " with parent u: " <<u<< std::endl;
+                        #endif
+                        pi.insert(u, v);
+
+                        #ifdef DEBUG_PRIM
+                        std::cout << "print pi "<<pi.size() << std::endl;
+                        for(int i =0; i<pi.size(); i++)
+                            std::cout <<pi.getValue(i) << " ";
+                        std::cout << std::endl;
+                        #endif
+
+                        // sets the priority of v to the weight of e
+                        key.pop(v);
+                        key.insert(e.getWeight(), v);
+                        // changes the priority of v in the queue
+                        pQ.changePriority(v, e.getWeight());
+                    }
+                }
+            }
+
+            #ifdef DEBUG_PRIM
+            std::cout << "pi after adding relevant edges of "<<u<<":"<< std::endl;
+            for(int i =0; i<pi.size(); i++)
+                std::cout <<pi.getValue(i) << " ";
+            std::cout << std::endl;
+            #endif
+        }
+
+        #ifdef DEBUG_PRIM
+        std::cout <<"size of pi: " << pi.size() << std::endl;
+        std::cout << "printing pi: " << std::endl;
+
+        for(int i=0; i<pi.size(); i++)
+            std::cout << pi.getValue(i) << " ";
+        #endif
+        // after going over all the vertices in g
+        // creates a new graph
+        Graph newGraph = Graph(g.numVertices());
+        // creates a list to store the edges in the MST
+        List<Edge> newEdges = List<Edge>();
+
+        // going over each vertex in g, apart from s, as it has no pi[s]
+        for(int i=1; i<g.numVertices(); i++){
+            #ifdef DEBUG_PRIM
+            std::cout << "getting vertex: "<< i<< std::endl;
+            #endif
+            // gets pi[i]
+            int pi_i = pi.getValue(i);
+            // checks if pi[i] is not -1, meaning it has a parent
+            if(pi_i != -1){
+                #ifdef DEBUG_PRIM
+                std::cout << "getting vertex: "<< i<< std::endl;
+                #endif
+
+                // gets the edge between i and pi[i] in g
+                const Vertex &vx = g.getVertex(i);
+                #ifdef DEBUG_PRIM
+                std::cout << "adding edge: "<< vx.getEdge(pi_i).to_string()<< std::endl;
+                #endif
+                const Edge &e = vx.getEdge(pi_i);
+
+                
+                // adds the edge to the list of edges
+                newEdges.insert(e);
+            }
+        }
+
+        #ifdef DEBUG_PRIM
+        std::cout << "test 3: " << std::endl;
+        #endif
+        // adds all the edges in newEdges to newGraph
+        for(int i=0; i<newEdges.size(); i++)
+            newGraph.addEdge(newEdges.getValue(i));
+
+        // returns the new graph
+        return newGraph;
+    }
+    /*
     Graph Algorithms::prim(const Graph &g){
         // creates a priority queue
         RevPriorityQueue<int> q = RevPriorityQueue<int>();
@@ -315,7 +483,7 @@ namespace graph{
         
         // returns the new Graph
         return newGraph;
-    }
+    }*/
     
     Graph Algorithms::kruskal(const Graph &g){
         // get all edges of g

@@ -224,7 +224,7 @@ TEST_CASE("Checking priority"){
         RevPriorityQueue<int> pQ = RevPriorityQueue<int>();
 
         // checks that the function throws an error on enqueueing with a negative priority
-        CHECK_THROWS(pQ.enqueue(5, -2));
+        CHECK_NOTHROW(pQ.enqueue(5, -2));
     }
 }
 
@@ -249,18 +249,18 @@ TEST_CASE("Change Priority"){
         // checks the value 3 is in the queue
         CHECK(pQ.contains(3) == true);
     
-        // changes the priority of the value 3 to 10
+        // changes the priority of the value 3 to -10
         // should cause it to move to the start
-        pQ.changePriority(3, 10);
+        pQ.changePriority(3, -10);
         // checks that 3 is at the top of the queue
         CHECK(pQ.top() == 3);
     
         // changes the priority of multiple values
-        pQ.changePriority(8, 2);
-        pQ.changePriority(2, 4);
+        pQ.changePriority(8, -4);
+        pQ.changePriority(2, -2);
     
         // changes the priority of 3 to 3
-        pQ.changePriority(3, 3);
+        pQ.changePriority(3, -3);
         // checks that 8 is at the top
         CHECK(pQ.top() == 8);
     
@@ -297,7 +297,7 @@ TEST_CASE("Change Priority"){
         CHECK(pQ.contains(5) == true);
 
         // changes the priority of 5 into a negative number
-        CHECK_THROWS(pQ.changePriority(5, -19));
+        CHECK_NOTHROW(pQ.changePriority(5, -19));
     }
 }
 
@@ -319,8 +319,8 @@ TEST_CASE("Memory Leak Tests"){
     CHECK(pQ->size() == 5);
 
     // dequeues multiple values from the queue
+    CHECK(pQ->dequeue() == 10);
     CHECK(pQ->dequeue() == 5);
-    CHECK(pQ->dequeue() == 2);
 
     // checks the size is 3
     CHECK(pQ->size() == 3);

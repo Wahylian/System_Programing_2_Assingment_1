@@ -38,41 +38,41 @@ class PriorityQueue{
         if(pQ._size == 0)
             return;
 
-            Node<Tuple<int, T>> *temp_other = pQ._head; // gets a pointer to the head of the other list
+        Node<Tuple<int, T>> *temp_other = pQ._head; // gets a pointer to the head of the other list
         
-            // copies the first value in list
+        // copies the first value in list
     
-            // creates a new node with the value at head
-            this->_head = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+        // creates a new node with the value at head
+        this->_head = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+    
+        // advances temp_other
+        temp_other = temp_other->getNext();
+    
+        // points temp pointer at the head
+        Node<Tuple<int, T>> *temp = this->_head;
+        // points last at temp
+        this->_last = temp;
+    
+        // copies over every other value in queue
+        for(int i=1; i<pQ._size; i++){
+            // creates a new node with the value at temp_other
+            Node<Tuple<int, T>> *tNode = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
     
             // advances temp_other
             temp_other = temp_other->getNext();
     
-            // points temp pointer at the head
-            Node<Tuple<int, T>> *temp = this->_head;
-            // points last at temp
-            this->_last = temp;
+            // points temp's next at it
+            temp->setNext(tNode);
     
-            // copies over every other value in queue
-            for(int i=1; i<pQ._size; i++){
-                // creates a new node with the value at temp_other
-                Node<Tuple<int, T>> *tNode = new Node<Tuple<int, T>>(Tuple(temp_other->getValue()));
+            // points last at temp's next
+            this->_last = temp->getNext();
     
-                // advances temp_other
-                temp_other = temp_other->getNext();
+            // advance temp
+            temp = temp->getNext();
+        }
     
-                // points temp's next at it
-                temp->setNext(tNode);
-    
-                // points last at temp's next
-                this->_last = temp->getNext();
-    
-                // advance temp
-                temp = temp->getNext();
-            }
-    
-            // sets the size of the queue
-            this->_size = pQ._size;
+        // sets the size of the queue
+        this->_size = pQ._size;
     }
 
     // destructor

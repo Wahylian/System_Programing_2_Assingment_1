@@ -3,7 +3,8 @@
 // debuging check
 #include "../debug.hpp"
 #endif
-
+#define DEBUG_PRIM
+#include <iostream>
 #include "node.hpp"
 #include <stdexcept>
 
@@ -147,8 +148,17 @@ class List{
         if(i < 0 || i > this->_size) // allows for i == size, since that will add at the end of the list
             throw std::out_of_range{"index" + std::to_string(i) + " is out of range"};
 
+        #ifdef DEBUG_PRIM
+        std::cout <<"end is "<< this->_end->getValue()<<std::endl;
+        #endif
+
         // if the list is empty, or i == size, calls the other insert function to add the value
         if(this->isEmpty() || i == this->_size){
+            #ifdef DEBUG_PRIM
+            std::cout <<"inserting at end of list"<< std::endl;
+            
+
+            #endif
             this->insert(value);
             return;
         }
@@ -285,6 +295,33 @@ class List{
             this->_start = this->_start->getNext();
             // separates temp from the list
             temp->setNext(nullptr);
+
+            // decrease size by one
+            this->_size--;
+
+            // saves the value in temp
+            T tVal = temp->getValue();
+            // deletes temp from the memory
+            delete temp;
+
+            // returns the value stored in temp
+            return tVal;
+        }
+
+        // if the index is the size of the list -1, pop the last value
+        if(i == this->size()-1){
+            // save a pointer to the end
+            Node<T> *temp = this->_end;
+
+            // points end to the node before it
+            Node<T> *before = this->_start;
+            while(before->getNext() != this->_end)
+                before = before->getNext();
+
+            // points before's next to null
+            before->setNext(nullptr);
+            // points end to before
+            this->_end = before;
 
             // decrease size by one
             this->_size--;

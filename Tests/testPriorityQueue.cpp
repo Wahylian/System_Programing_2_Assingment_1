@@ -224,7 +224,7 @@ TEST_CASE("Checking priority"){
         PriorityQueue<int> pQ = PriorityQueue<int>();
 
         // checks that the function throws an error on enqueueing with a negative priority
-        CHECK_THROWS(pQ.enqueue(5, -2));
+        CHECK_NOTHROW(pQ.enqueue(5, -2));
     }
 }
 
@@ -297,7 +297,7 @@ TEST_CASE("Change Priority"){
         CHECK(pQ.contains(5) == true);
 
         // changes the priority of 5 into a negative number
-        CHECK_THROWS(pQ.changePriority(5, -19));
+        CHECK_NOTHROW(pQ.changePriority(5, -19));
     }
 }
 

@@ -126,7 +126,7 @@ TEST_CASE("Adding edge to list"){
 
         // checks that v has 2 edges now
         const Vertex &vx3 = aj.getVertex(1);
-        CHECK(vx2.getNumEdges() == 2);
+        CHECK(vx3.getNumEdges() == 2);
     }
 }
 TEST_CASE("Remove Edges"){
@@ -211,7 +211,7 @@ TEST_CASE("Test Memory Leak"){
     CHECK(aj->getNumEdges() == 4); 
 
     // gets a vertex from the list
-    const Vertex &vx = aj->getVertex(3);
+    //const Vertex &vx = aj->getVertex(3);
 
     // removes an edge from the list
     aj->removeEdge(1, 4);
