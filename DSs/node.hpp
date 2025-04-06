@@ -23,17 +23,7 @@ class Node{
     {
         // nothing to do
     }
-    // copy constructor
-    Node(const Node<T> &node):
-    _value{node.getValue()},
-    _next{node.getNext()}
-    {
-        // nothing to do
-    }
     #pragma endregion
-
-
-
 
 
     #pragma region Getters
@@ -41,7 +31,7 @@ class Node{
     T& getValue() {return this->_value;}
 
     // returns the next node
-    Node<T>* getNext(){return this->_next;}
+    Node<T>* getNext() {return this->_next;}
 
     #pragma endregion
 

@@ -14,7 +14,8 @@ MAIN_OBJ = main.o $(OBJS_GRAPH) $(OBJS_DS)
 TEST_OBJ = Tests/testFile.o Tests/testList.o Tests/testPriorityQueue.o Tests/testReversePriorityQueue.o \
 	Tests/testUnionFind.o DSs/unionFind.o Tests/testEdge.o Graphs/edge.o Tests/testVertex.o \
 	Graphs/vertex.o Tests/testAdjacencyList.o Graphs/adjacencyList.o Tests/testGraph.o \
-	Graphs/graph.o Tests/testAlgorithm.o Graphs/algorithm.o
+	Graphs/graph.o Tests/testAlgorithm.o Graphs/algorithm.o Tests/testNode.o DSs/node.o \
+	Tests/testTuple.o DSs/tuple.o
 
 # valgrind flags, taken from course site, folder 02-classes-constructors-destructors: the makefile in the valgrind folder
 VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all --error-exitcode=99 
